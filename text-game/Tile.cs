@@ -2,6 +2,12 @@
 {
     internal class Tile
     {
-        bool Empty = false;
+        public string TileID;
+        public bool Empty = true;
+
+        public Tile(string tileID) 
+        {
+            TileID = tileID;
+        }
     }
 }

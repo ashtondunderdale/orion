@@ -2,15 +2,28 @@
 
 internal class Chess
 {
-    static string TileList = BuildBoard();
+    static List<Tile> TileList;
+    static int BoardSize = 8;
 
-    static void Main() => BuildBoard();
+    static void Main() => CreateTiles();
 
-    static void BuildBoard() 
+    static void CreateTiles() 
     {
-        for (var i = 0; i < 8; i++) 
+        Console.Write("  ");
+        for (char letter = 'A'; letter < 'A' + BoardSize; letter++) Console.Write($"  {letter} ");
+        Console.WriteLine();
+
+        for (var row = BoardSize; row > 0; row--) 
         {
-            Console.Write("");
+            Console.Write($" {row} ");
+
+            for (var column = 0; column < BoardSize; column++)
+            {
+                Console.BackgroundColor = (row + column) % 2 == 0 ? ConsoleColor.White : ConsoleColor.DarkGray;
+                Console.Write($" {Convert.ToChar('A' + column)}{row} ");
+                Console.BackgroundColor = ConsoleColor.Black;
+            }
+            Console.WriteLine();
         }
     }
 }
