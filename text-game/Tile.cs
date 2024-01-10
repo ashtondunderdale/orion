@@ -3,11 +3,13 @@
     internal class Tile
     {
         public string TileID;
-        public bool Empty = true;
+        public string Piece = "";
 
-        public Tile(string tileID) 
+
+        public Tile(string tileID, string piece) 
         {
             TileID = tileID;
+            Piece = piece;
         }
     }
 }
