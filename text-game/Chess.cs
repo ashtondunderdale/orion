@@ -26,7 +26,7 @@ internal class Chess
             {
                 Console.BackgroundColor = (row + column) % 2 != 0 ? ConsoleColor.White : ConsoleColor.DarkGray;
 
-                string tileID = " " + Convert.ToChar('a' + column - 1) + row.ToString() + " ";
+                string tileID = Convert.ToChar('a' + column - 1) + row.ToString();
 
                 if (rebuild == false)
                 {
@@ -45,7 +45,6 @@ internal class Chess
         }
         Console.WriteLine("\n\n");
     }
-
 
     static string GetPieces(int row, int column)
     {
@@ -76,13 +75,16 @@ internal class Chess
         return "    ";
     }
 
-
     static void MovePawn(string notation)
     {
-        foreach (var tile in TileList)
-        {
-            tile.Piece = " P  ";
-        }
+        char letter = notation[0];
+        int columnNumber = Convert.ToInt32(char.ToUpper(letter)) - 'A' + 1;
+
+        var notationNumber = notation[1] - '0';
+
+        var pawnPositionOne = TileList[columnNumber - 1].TileID[0] + (notationNumber - 1).ToString();
+        var pawnPositionTwo = TileList[columnNumber - 1].TileID[0] + (notationNumber - 2).ToString();
+
 
         BuildBoard(true);
     }
