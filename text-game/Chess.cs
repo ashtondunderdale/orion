@@ -5,15 +5,20 @@ internal class Chess
     static List<Tile> TileList = new();
     static int BoardSize = 8;
 
-    static void Main() => BuildBoard();
+    static void Main()
+    {
+        BuildBoard(false);
+        MovePawn("e4");
+    }
 
-    static void BuildBoard() 
+    static void BuildBoard(bool rebuild)
     {
         Console.Write("  ");
         for (char letter = 'A'; letter < 'A' + BoardSize; letter++) Console.Write($"  {letter} ");
         Console.WriteLine();
 
-        for (var row = BoardSize; row > 0; row--) 
+        int index = 0;
+        for (var row = BoardSize; row > 0; row--)
         {
             Console.Write($" {row} ");
 
@@ -21,17 +26,26 @@ internal class Chess
             {
                 Console.BackgroundColor = (row + column) % 2 != 0 ? ConsoleColor.White : ConsoleColor.DarkGray;
 
-                string tileID = " " + Convert.ToChar('A' + column - 1) + row.ToString() + " ";
-                Tile tile = new(tileID, GetPieces(row, column));
-                TileList.Add(tile);
+                string tileID = " " + Convert.ToChar('a' + column - 1) + row.ToString() + " ";
 
-                Console.Write(tile.Piece);
-
+                if (rebuild == false)
+                {
+                    Tile tile = new(tileID, GetPieces(row, column));
+                    TileList.Add(tile);
+                    Console.Write(tile.Piece);
+                }
+                else
+                {
+                    Tile tile = TileList[index++];
+                    Console.Write(tile.Piece);
+                }
                 Console.BackgroundColor = ConsoleColor.Black;
             }
             Console.WriteLine();
         }
+        Console.WriteLine("\n\n");
     }
+
 
     static string GetPieces(int row, int column)
     {
@@ -60,5 +74,16 @@ internal class Chess
             return " P  ";
         }
         return "    ";
+    }
+
+
+    static void MovePawn(string notation)
+    {
+        foreach (var tile in TileList)
+        {
+            tile.Piece = " P  ";
+        }
+
+        BuildBoard(true);
     }
 }
