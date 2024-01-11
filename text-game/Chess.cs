@@ -85,7 +85,33 @@ internal class Chess
         var pawnPositionOne = TileList[columnNumber - 1].TileID[0] + (notationNumber - 1).ToString();
         var pawnPositionTwo = TileList[columnNumber - 1].TileID[0] + (notationNumber - 2).ToString();
 
+        foreach (var tile in TileList) 
+        {
+            if (tile.TileID == pawnPositionOne)
+            {
+                if (tile.Piece == "") return;
 
+                else if (tile.Piece == " P  ")
+                {
+                    tile.Piece = " P  ";
+                }
+            }
+            else if (tile.TileID == pawnPositionTwo)
+            {
+                if (tile.Piece == "") return;
+
+                else if (tile.Piece == " P  ")
+                {
+                    int index = TileList.IndexOf(tile);
+
+                    if (index != -1)
+                    {
+                        TileList[index].Piece = " P  ";
+                    }
+                }
+
+            }
+        }
         BuildBoard(true);
     }
 }
