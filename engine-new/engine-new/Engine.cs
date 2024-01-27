@@ -62,9 +62,9 @@ internal class Engine
             Utils.ClearConsole();
 
             Utils.ShowMessage("Enter project name");
-            string? projectName = Console.ReadLine();
+            string? projectName = Console.ReadLine()?.Trim();
 
-            if (string.IsNullOrEmpty(projectName)) 
+            if (string.IsNullOrWhiteSpace(projectName)) 
             {
                 Utils.ShowWarning("\nInvalid project name.");
                 Utils.CleanConsole();
@@ -92,7 +92,7 @@ internal class Engine
     {
         Utils.ClearConsole();
 
-        if (Projects.Count == 0)
+        if (NoProjectsExist())
         {
             Utils.ShowWarning("There are no projects to display.");
             Utils.CleanConsole();
@@ -106,12 +106,12 @@ internal class Engine
         {
             Project chosenProject = Projects[chosenProjectIndex - 1];
             SetActiveProject(chosenProject);
-            Utils.ShowMessage($"\nLoading {chosenProject.Name}");
+
+            Utils.ShowMessage($"\nLoading {ActiveProject!.Name}");
+
+            chosenProject.Initialise();
         }
-        else
-        {
-            Utils.ShowError("\nInvalid input. Project does not exist.");
-        }
+        else Utils.ShowError("\nInvalid input. Project does not exist.");
 
         Utils.CleanConsole();
     }
@@ -120,7 +120,7 @@ internal class Engine
     {
         Utils.ClearConsole();
 
-        if (Projects.Count == 0)
+        if (NoProjectsExist())
         {
             Utils.ShowWarning("There are no projects to delete.");
             Utils.CleanConsole();
@@ -136,13 +136,12 @@ internal class Engine
             Projects.Remove(chosenProject);
             Utils.ShowMessage($"\nDeleted Project '{chosenProject.Name}'");
         }
-        else
-        {
-            Utils.ShowError("\nInvalid input. Project does not exist.");
-        }
+        else Utils.ShowError("\nInvalid input. Project does not exist.");     
 
         Utils.CleanConsole();
     }
+
+    static bool NoProjectsExist() => Projects.Count == 0;
 
     static bool ProjectExists(string projectName) => Projects.Any(project => project.Name == projectName);
 

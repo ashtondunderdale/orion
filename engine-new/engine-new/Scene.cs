@@ -2,5 +2,10 @@
 
 internal class Scene
 {
-    String Name;
+    public String? Name;
+
+    public Scene(string name) 
+    {
+        Name = name;
+    }
 }
