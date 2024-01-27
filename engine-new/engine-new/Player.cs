@@ -2,10 +2,11 @@
 
 internal class Player : GameObject
 {
-    Player(int x, int y, String symbol)
+    public Player(int x, int y, String symbol, string name)
     {
         BasePositionX = x;
         BasePositionY = y;
         Symbol = symbol;
+        Name = name;
     }
 }

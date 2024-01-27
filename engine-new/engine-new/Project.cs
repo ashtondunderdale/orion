@@ -28,10 +28,13 @@ internal class Project
                 continue;
             }
 
-            switch (command) 
+            var commandString = command.Split(' ');
+            string mainCommand = commandString[0] + ' ' + commandString[1];
+
+            switch (mainCommand) 
             {
                 case "cr obj":
-                    CreateObject();
+                    CreateObject(command);
                     break;
 
                 case "cr scn":
@@ -47,7 +50,7 @@ internal class Project
                     SelectScene();
                     break;
 
-                case "render":
+                case "rdr scn":
                     RenderScene();
                     break;
 
@@ -59,11 +62,37 @@ internal class Project
         }
     }
 
-    public void CreateObject() 
+    public void CreateObject(string command)
     {
-        while (true) 
+        while (true)
         {
-            Console.WriteLine("Enter the type of game object to create");
+            Console.WriteLine("\nEnter the type of game object to create.\n\n");
+            Console.WriteLine("1 |  Player\n");
+
+            if (int.TryParse(Console.ReadLine(), out int objectType) && objectType == 1)
+            {
+                Console.WriteLine("Enter the X coordinate:");
+                int x = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter the Y coordinate:");
+                int y = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter the name:");
+                string name = Console.ReadLine();
+
+                Player player = new(x, y, "@", name);
+                ActiveScene!.GameObjects.Add(player);
+
+                Utils.ShowMessage($"\nCreated object '{player.Name}'.");
+
+                Utils.CleanConsole();
+                break;
+            }
+            else
+            {
+                Utils.ShowError(Message.InvalidInputWarning);
+                Utils.CleanConsole();
+            }
         }
     }
 
