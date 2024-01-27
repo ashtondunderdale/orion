@@ -5,7 +5,7 @@ namespace engine_new;
 internal class Engine
 {
     static List<Project> Projects = new();
-    static Project? ActiveProject;
+    public static Project? ActiveProject;
 
     private static void Main() => Initialise();
 
@@ -86,7 +86,6 @@ internal class Engine
 
             break;
         }
-
     }
 
     private static void LoadProject()
@@ -100,18 +99,13 @@ internal class Engine
             return;
         }
 
-        int projectIndex = 1;
-        foreach (Project project in Projects)
-        {
-            Console.WriteLine($"{projectIndex} |  {project.Name}\n");
-            projectIndex++;
-        }
+        ListProjects();
+        Console.Write("Enter project index to load.\n");
 
-        Console.Write("Enter the number of the project to load\n");
         if (int.TryParse(Console.ReadLine(), out int chosenProjectIndex) && chosenProjectIndex >= 1 && chosenProjectIndex <= Projects.Count)
         {
             Project chosenProject = Projects[chosenProjectIndex - 1];
-            ActiveProject = chosenProject;
+            SetActiveProject(chosenProject);
             Utils.ShowMessage($"\nLoading {chosenProject.Name}");
         }
         else
@@ -124,8 +118,43 @@ internal class Engine
 
     private static void DeleteProject()
     {
+        Utils.ClearConsole();
 
+        if (Projects.Count == 0)
+        {
+            Utils.ShowWarning("There are no projects to delete.");
+            Utils.CleanConsole();
+            return;
+        }
+
+        ListProjects();
+        Console.Write("Enter project index to delete\n");
+
+        if (int.TryParse(Console.ReadLine(), out int chosenProjectIndex) && chosenProjectIndex >= 1 && chosenProjectIndex <= Projects.Count)
+        {
+            Project chosenProject = Projects[chosenProjectIndex - 1];
+            Projects.Remove(chosenProject);
+            Utils.ShowMessage($"\nDeleted Project '{chosenProject.Name}'");
+        }
+        else
+        {
+            Utils.ShowError("\nInvalid input. Project does not exist.");
+        }
+
+        Utils.CleanConsole();
     }
 
-    static bool ProjectExists(string projectName) => Projects.Any(project => project.Name == projectName);  
+    static bool ProjectExists(string projectName) => Projects.Any(project => project.Name == projectName);
+
+    static void ListProjects() 
+    {
+        int projectIndex = 1;
+        foreach (Project project in Projects)
+        {
+            Console.WriteLine($"{projectIndex} |  {project.Name}\n");
+            projectIndex++;
+        }
+    }
+
+    static void SetActiveProject(Project project) => ActiveProject = project;
 }
