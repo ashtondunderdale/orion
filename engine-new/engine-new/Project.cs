@@ -23,13 +23,17 @@ internal class Project
 
             if (string.IsNullOrWhiteSpace(command))
             {
-                Utils.ShowWarning("\nInvalid command.");
+                Utils.ShowWarning(Message.CommandDoesNotExistWarning);
                 Utils.CleanConsole();
                 continue;
             }
 
             switch (command) 
             {
+                case "cr obj":
+                    CreateObject();
+                    break;
+
                 case "cr scn":
                     CreateScene();
                     break;
@@ -43,15 +47,23 @@ internal class Project
                     SelectScene();
                     break;
 
-                case "run":
-                    RunScene();
+                case "render":
+                    RenderScene();
                     break;
 
                 default:
-                    Utils.ShowWarning("Invalid command.");
+                    Utils.ShowWarning(Message.CommandDoesNotExistWarning);
                     Utils.CleanConsole();
                     break;
             }
+        }
+    }
+
+    public void CreateObject() 
+    {
+        while (true) 
+        {
+            Console.WriteLine("Enter the type of game object to create");
         }
     }
 
@@ -66,14 +78,14 @@ internal class Project
 
             if (string.IsNullOrWhiteSpace(sceneName))
             {
-                Utils.ShowWarning("\nInvalid scene name.");
+                Utils.ShowWarning(Message.ObjectReferenceCanNotBeEmptyWarning("scene"));
                 Utils.CleanConsole();
                 continue;
             }
 
             if (SceneExists(sceneName))
             {
-                Utils.ShowWarning("\nA scene with this name already exists.");
+                Utils.ShowWarning(Message.ObjectAlreadyExistsWarning("scene"));
                 Utils.CleanConsole();
                 continue;
             }
@@ -90,6 +102,13 @@ internal class Project
 
     void SelectScene()
     {
+        if (NoScenesExist()) 
+        {
+            Utils.ShowWarning(Message.ObjectDoesNotExistsWarning("scene"));
+            Utils.CleanConsole();
+            return;
+        }
+
         ListScenes();
 
         if (int.TryParse(Console.ReadLine(), out int sceneIndex) && sceneIndex >= 1 && sceneIndex <= Scenes.Count)
@@ -100,17 +119,29 @@ internal class Project
 
             Utils.ShowMessage($"\nActive scene set '{ActiveScene!.Name}'");
         }
-        else
-        {
-            Utils.ShowError("Invalid input. Scene does not exist.");
-        }
+        else Utils.ShowError(Message.ObjectDoesNotExistsWarning("scene"));      
 
         Utils.CleanConsole();
     }
 
-    public void RunScene() 
-    { 
-    
+    public void RenderScene() 
+    {
+        if (ActiveScene is null) 
+        {
+            Utils.ShowWarning("Select an Active Scene to run.");
+            Utils.CleanConsole();
+            return;
+        }
+
+        Utils.ClearConsole();
+
+        foreach (GameObject obj in ActiveScene.GameObjects) 
+        {
+            Console.SetCursorPosition(obj.BasePositionX, obj.BasePositionY);
+            Console.Write(obj.Symbol);
+        }
+
+        Utils.CleanConsole();
     }
 
     bool SceneExists(string sceneName) => Scenes.Any(scene => scene.Name == sceneName);
@@ -126,4 +157,6 @@ internal class Project
     }
 
     void SetActiveScene(Scene scene) => ActiveScene = scene;
+
+    bool NoScenesExist() => Scenes.Count == 0;
 }

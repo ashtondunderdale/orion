@@ -48,7 +48,7 @@ internal class Engine
                     return;
 
                 default:
-                    Utils.ShowError("Invalid Option");
+                    Utils.ShowError(Message.InvalidInputWarning);
                     Utils.CleanConsole();
                     continue;
             }
@@ -66,14 +66,14 @@ internal class Engine
 
             if (string.IsNullOrWhiteSpace(projectName)) 
             {
-                Utils.ShowWarning("\nInvalid project name.");
+                Utils.ShowWarning(Message.ObjectReferenceCanNotBeEmptyWarning("project"));
                 Utils.CleanConsole();
                 continue;
             }
 
             if (ProjectExists(projectName)) 
             {
-                Utils.ShowWarning("\nA project with this name already exists.");
+                Utils.ShowWarning(Message.ObjectAlreadyExistsWarning("project"));
                 Utils.CleanConsole();
                 continue;
             }
@@ -94,7 +94,7 @@ internal class Engine
 
         if (NoProjectsExist())
         {
-            Utils.ShowWarning("There are no projects to display.");
+            Utils.ShowWarning(Message.ObjectDoesNotExistsWarning("project"));
             Utils.CleanConsole();
             return;
         }
@@ -111,7 +111,7 @@ internal class Engine
 
             chosenProject.Initialise();
         }
-        else Utils.ShowError("\nInvalid input. Project does not exist.");
+        else Utils.ShowError(Message.ObjectDoesNotExistsWarning("project"));
 
         Utils.CleanConsole();
     }
@@ -122,7 +122,7 @@ internal class Engine
 
         if (NoProjectsExist())
         {
-            Utils.ShowWarning("There are no projects to delete.");
+            Utils.ShowWarning(Message.ObjectDoesNotExistsWarning("project"));
             Utils.CleanConsole();
             return;
         }
@@ -136,7 +136,8 @@ internal class Engine
             Projects.Remove(chosenProject);
             Utils.ShowMessage($"\nDeleted Project '{chosenProject.Name}'");
         }
-        else Utils.ShowError("\nInvalid input. Project does not exist.");     
+        else Utils.ShowWarning(Message.ObjectDoesNotExistsWarning("project"));
+
 
         Utils.CleanConsole();
     }

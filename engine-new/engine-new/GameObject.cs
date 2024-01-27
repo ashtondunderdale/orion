@@ -2,7 +2,8 @@
 
 internal class GameObject
 {
-    public static int BasePositionX;
-    public static int BasePositionY;
+    public int BasePositionX;
+    public int BasePositionY;
 
+    public String Symbol;
 }
