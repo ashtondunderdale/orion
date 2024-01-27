@@ -5,7 +5,7 @@ internal class Project
     public String Name;
     public List<Scene> Scenes = new();
 
-    Project(String name) 
+    public Project(String name) 
     {
         Name = name;
     }
