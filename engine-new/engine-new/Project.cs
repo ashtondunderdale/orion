@@ -51,6 +51,11 @@ internal class Project
 
                 case "rdr":
                     RenderScene();
+                    Utils.CleanConsole();
+                    break;
+
+                case "ply":
+                    PlayScene();
                     break;
 
                 default:
@@ -168,8 +173,38 @@ internal class Project
             Console.SetCursorPosition(obj.BasePositionX, obj.BasePositionY);
             Console.Write(obj.Symbol);
         }
+    }
 
-        Utils.CleanConsole();
+    public void PlayScene() 
+    {
+        RenderScene();
+
+        Player player = ActiveScene!.GameObjects.OfType<Player>().FirstOrDefault()!;
+
+        while (true) 
+        { 
+            var action = Console.ReadKey();
+
+            switch (action.Key) 
+            {
+                case ConsoleKey.UpArrow:     
+                case ConsoleKey.DownArrow:
+                case ConsoleKey.LeftArrow:
+                case ConsoleKey.RightArrow:
+
+
+                    player?.Move(action.Key);
+                    break;
+
+                case ConsoleKey.Tab:
+                    Utils.ClearConsole();
+                    player?.ResetPlayerPosition();
+                    return;
+
+                default: // fix so that if user types any characters - they will not show up.
+                    continue;
+            }
+        }
     }
 
     bool SceneExists(string sceneName) => Scenes.Any(scene => scene.Name == sceneName);
