@@ -2,11 +2,11 @@
 
 internal class Player : GameObject
 {
-    public Player(int x, int y, String symbol, string name)
+    public Player(int x, int y, string name)
     {
         BasePositionX = x;
         BasePositionY = y;
-        Symbol = symbol;
+        Symbol = Utils.PlayerSymbol;
         Name = name;
     }
 }

@@ -2,6 +2,8 @@
 
 internal class Utils
 {
+    public const String PlayerSymbol = "@";
+
     public static void CleanConsole() 
     { 
         Console.ReadKey();

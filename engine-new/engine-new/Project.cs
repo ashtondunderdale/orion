@@ -28,8 +28,7 @@ internal class Project
                 continue;
             }
 
-            var commandString = command.Split(' ');
-            string mainCommand = commandString[0] + ' ' + commandString[1];
+            string mainCommand = command.Contains(' ') ? $"{command.Split(' ')[0]} {command.Split(' ')[1]}" : command;
 
             switch (mainCommand) 
             {
@@ -50,7 +49,7 @@ internal class Project
                     SelectScene();
                     break;
 
-                case "rdr scn":
+                case "rdr":
                     RenderScene();
                     break;
 
@@ -80,7 +79,7 @@ internal class Project
                 Console.WriteLine("Enter the name:");
                 string name = Console.ReadLine();
 
-                Player player = new(x, y, "@", name);
+                Player player = new(x, y, name);
                 ActiveScene!.GameObjects.Add(player);
 
                 Utils.ShowMessage($"\nCreated object '{player.Name}'.");

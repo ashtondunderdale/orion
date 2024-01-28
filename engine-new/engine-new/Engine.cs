@@ -9,10 +9,24 @@ internal class Engine
 
     private static void Main() => Initialise();
 
+    public static void AddSampleObjects()
+    {
+        Project project = new("Test Project");
+        Projects.Add(project);
+
+        Scene scene = new("Test Scene");
+        project.Scenes.Add(scene);
+        project.ActiveScene = scene;
+
+        Player player = new(20, 10, "myPlayer");
+        scene.GameObjects.Add(player);
+    }
+
     private static void Initialise() 
     {
         Console.Write("Initialising Engine..");
         Console.ReadKey();
+        AddSampleObjects(); // here
         Launcher();
     }
 
