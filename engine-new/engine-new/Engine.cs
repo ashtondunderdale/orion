@@ -12,7 +12,7 @@ internal class Engine
     private static void Initialise() 
     {
         Console.Write("Initialising Engine..");
-        Console.ReadKey();
+        Utils.CleanConsole();
         Launcher();
     }
 
@@ -22,7 +22,9 @@ internal class Engine
 
         while (true)
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("Orion Engine\n\n");
+            Console.ResetColor();
 
             Console.WriteLine("1 |  Create Project");
             Console.WriteLine("2 |  Load Project");
@@ -136,6 +138,9 @@ internal class Engine
         {
             Project chosenProject = Projects[chosenProjectIndex - 1];
             Projects.Remove(chosenProject);
+
+            Directory.Delete(Utils.ProjectPath + chosenProject.Name, true);
+
             Utils.ShowMessage($"\nDeleted Project '{chosenProject.Name}'");
         }
         else Utils.ShowWarning(Message.ObjectDoesNotExistsWarning("project"));
