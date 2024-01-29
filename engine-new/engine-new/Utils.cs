@@ -3,6 +3,7 @@
 internal class Utils
 {
     public const String PlayerSymbol = "@";
+    public const String BlockSymbol = "#";
 
     public static void CleanConsole() 
     { 

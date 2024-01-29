@@ -51,7 +51,6 @@ internal class Project
 
                 case "rdr":
                     RenderScene();
-                    Utils.CleanConsole();
                     break;
 
                 case "ply":
@@ -107,7 +106,7 @@ internal class Project
                 Utils.CleanConsole();
                 break;
             }
-            else if (int.TryParse(Console.ReadLine(), out objectType) && objectType == 1) 
+            else if (int.TryParse(Console.ReadLine(), out objectType) && objectType == 2) 
             {
                 Console.WriteLine("Enter the X coordinate:");
                 int x = int.Parse(Console.ReadLine());
@@ -196,7 +195,7 @@ internal class Project
     {
         if (ActiveScene is null) 
         {
-            Utils.ShowWarning("Select an Active Scene to run.");
+            Utils.ShowWarning("\nSelect an Active Scene to render / play.");
             Utils.CleanConsole();
             return;
         }
@@ -208,12 +207,16 @@ internal class Project
             Console.SetCursorPosition(obj.BasePositionX, obj.BasePositionY);
             Console.Write(obj.Symbol);
         }
+
+        Utils.CleanConsole();
     }
 
     public void PlayScene() 
     {
         RenderScene();
 
+        if (ActiveScene is null) return;
+        
         Player player = ActiveScene!.GameObjects.OfType<Player>().FirstOrDefault()!;
 
         while (true) 
