@@ -5,6 +5,6 @@ internal class GameObject
     public int BasePositionX;
     public int BasePositionY;
 
-    public String Name;
-    public String Symbol;
+    public String? Name;
+    public String? Symbol;
 }

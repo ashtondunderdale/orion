@@ -70,10 +70,44 @@ internal class Project
     {
         while (true)
         {
+            if (ActiveScene is null) 
+            {
+                Utils.ShowWarning("\nActive scene must not be null to add objects.");
+                Utils.CleanConsole();
+                return;
+            }
+
             Console.WriteLine("\nEnter the type of game object to create.\n\n");
             Console.WriteLine("1 |  Player\n");
 
             if (int.TryParse(Console.ReadLine(), out int objectType) && objectType == 1)
+            {
+
+                if (ActiveScene?.GameObjects.OfType<Player>().Any() == true)
+                {
+                    Utils.ShowWarning("\nPlayer already exists in this space.");
+                    Utils.CleanConsole();
+                    return;
+                }
+
+                Console.WriteLine("Enter the X coordinate:");
+                int x = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter the Y coordinate:");
+                int y = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter the name:");
+                string name = Console.ReadLine();
+
+                Player player = new(x, y, name);
+                ActiveScene!.GameObjects.Add(player);
+
+                Utils.ShowMessage($"\nCreated object '{player.Name}'.");
+
+                Utils.CleanConsole();
+                break;
+            }
+            else if (int.TryParse(Console.ReadLine(), out objectType) && objectType == 1) 
             {
                 Console.WriteLine("Enter the X coordinate:");
                 int x = int.Parse(Console.ReadLine());
@@ -92,6 +126,7 @@ internal class Project
                 Utils.CleanConsole();
                 break;
             }
+
             else
             {
                 Utils.ShowError(Message.InvalidInputWarning);
