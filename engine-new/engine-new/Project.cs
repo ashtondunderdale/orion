@@ -33,7 +33,7 @@ internal class Project
             switch (mainCommand) 
             {
                 case "cr obj":
-                    CreateObject(command);
+                    CreateObject();
                     break;
 
                 case "cr scn":
@@ -51,6 +51,7 @@ internal class Project
 
                 case "rdr":
                     RenderScene();
+                    Utils.CleanConsole();
                     break;
 
                 case "ply":
@@ -65,7 +66,7 @@ internal class Project
         }
     }
 
-    public void CreateObject(string command)
+    public void CreateObject()
     {
         while (true)
         {
@@ -78,8 +79,11 @@ internal class Project
 
             Console.WriteLine("\nEnter the type of game object to create.\n\n");
             Console.WriteLine("1 |  Player\n");
+            Console.WriteLine("2 |  Block\n");
 
-            if (int.TryParse(Console.ReadLine(), out int objectType) && objectType == 1)
+            string? objectInput = Console.ReadLine();
+
+            if (int.TryParse(objectInput, out int objectType) && objectType == 1)
             {
 
                 if (ActiveScene?.GameObjects.OfType<Player>().Any() == true)
@@ -89,13 +93,13 @@ internal class Project
                     return;
                 }
 
-                Console.WriteLine("Enter the X coordinate:");
+                Console.WriteLine("\nEnter the X coordinate:");
                 int x = int.Parse(Console.ReadLine());
 
-                Console.WriteLine("Enter the Y coordinate:");
+                Console.WriteLine("\nEnter the Y coordinate:");
                 int y = int.Parse(Console.ReadLine());
 
-                Console.WriteLine("Enter the name:");
+                Console.WriteLine("\nEnter the name:");
                 string name = Console.ReadLine();
 
                 Player player = new(x, y, name);
@@ -106,26 +110,25 @@ internal class Project
                 Utils.CleanConsole();
                 break;
             }
-            else if (int.TryParse(Console.ReadLine(), out objectType) && objectType == 2) 
+            else if (int.TryParse(objectInput, out objectType) && objectType == 2) 
             {
-                Console.WriteLine("Enter the X coordinate:");
+                Console.WriteLine("\nEnter the X coordinate:");
                 int x = int.Parse(Console.ReadLine());
 
-                Console.WriteLine("Enter the Y coordinate:");
+                Console.WriteLine("\nEnter the Y coordinate:");
                 int y = int.Parse(Console.ReadLine());
 
-                Console.WriteLine("Enter the name:");
+                Console.WriteLine("\nEnter the name:");
                 string name = Console.ReadLine();
 
-                Player player = new(x, y, name);
-                ActiveScene!.GameObjects.Add(player);
+                Block block = new(x, y, name);
+                ActiveScene!.GameObjects.Add(block);
 
-                Utils.ShowMessage($"\nCreated object '{player.Name}'.");
+                Utils.ShowMessage($"\nCreated object '{block.Name}'.");
 
                 Utils.CleanConsole();
                 break;
             }
-
             else
             {
                 Utils.ShowError(Message.InvalidInputWarning);
@@ -207,8 +210,6 @@ internal class Project
             Console.SetCursorPosition(obj.BasePositionX, obj.BasePositionY);
             Console.Write(obj.Symbol);
         }
-
-        Utils.CleanConsole();
     }
 
     public void PlayScene() 

@@ -2,7 +2,7 @@
 
 internal class Block : GameObject
 {
-    Block(int x, int y, string name) 
+    public Block(int x, int y, string name) 
     {
         Symbol = Utils.BlockSymbol;
         BasePositionX = x;

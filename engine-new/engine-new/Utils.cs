@@ -11,11 +11,8 @@ internal class Utils
         Console.Clear();
     }
 
-    public static void ClearConsole() 
-    {
-        Console.Clear();
-    }
-
+    public static void ClearConsole() => Console.Clear(); // just go with it
+    
     public static void ShowError(string error) 
     { 
         Console.ForegroundColor = ConsoleColor.Red;
