@@ -313,11 +313,19 @@ internal class Project
 
                 foreach (var loadedObjectData in loadedSceneData.GameObjects)
                 {
-                    // Deserialize the object from its string representation
-                    GameObject obj = JsonConvert.DeserializeObject<GameObject>(loadedObjectData, settings);
+                    GameObject obj;
+
+                    if (loadedObjectData.Contains("\"Name\": \"player\""))
+                    {
+                        obj = JsonConvert.DeserializeObject<Player>(loadedObjectData, settings);
+                    }
+                    else
+                    {
+                        obj = JsonConvert.DeserializeObject<GameObject>(loadedObjectData, settings);
+                    }
+
                     scene.GameObjects.Add(obj);
                 }
-
                 Scenes.Add(scene);
             }
         }
