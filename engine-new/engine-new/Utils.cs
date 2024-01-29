@@ -2,7 +2,7 @@
 
 internal class Utils
 {
-    public const string ProjectPath = @"C:\Users\adunderdale\ORION";
+    public const string ProjectPath = @"C:\Users\adunderdale\ORION\";
 
     public const String PlayerSymbol = "@";
     public const String BlockSymbol = "#";

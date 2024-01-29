@@ -1,10 +1,14 @@
-﻿namespace engine_new;
+﻿using Newtonsoft.Json;
+
+namespace engine_new;
 
 internal class Project
 {
     public String Name;
     public List<Scene> Scenes = new();
     public Scene? ActiveScene;
+
+    public string ProjectJsonPath => Utils.ProjectPath + Name;
 
     public Project(String name)
     {
@@ -255,37 +259,40 @@ internal class Project
             }
         }
     }
+
     public void SaveProject()
     {
-        if (!Directory.Exists($"{Utils.ProjectPath}/{Name}"))
+        if (!Directory.Exists(ProjectJsonPath))
         {
             CreateProjectSave();
         }
 
-        string filePath = Path.Combine($"{Utils.ProjectPath}/{Name}", $"{Name}.txt");
-
-        using (StreamWriter sw = File.CreateText(filePath))
+        using StreamWriter sw = File.CreateText(ProjectJsonPath + $"\\{Name}.json");
         {
-            sw.WriteLine($"Hello! This is your saved project file for {Name}\n\n");
-
-            foreach (Scene scene in Scenes)
+            JsonSerializerSettings settings = new()
             {
-                sw.WriteLine($"Scene Name: {scene.Name}");
+                Formatting = Formatting.Indented
+            };
 
-                foreach (GameObject obj in scene.GameObjects)
+            var projectData = new
+            {
+                ProjectName = Name,
+                Greeting = $"Hello! This is your saved project file for {Name}",
+                Scenes = Scenes.Select(scene => new
                 {
-                    sw.WriteLine($"Object: {obj.Name}");
-                    sw.WriteLine($"X: {obj.BasePositionX}");
-                    sw.WriteLine($"Y: {obj.BasePositionY}");
-                }
-            }
+                    SceneName = scene.Name,
+                    GameObjects = scene.GameObjects.Select(obj => JsonConvert.SerializeObject(obj, settings)).ToList()
+                }).ToList()
+            };
+
+            string projectJson = JsonConvert.SerializeObject(projectData, settings);
+            sw.Write(projectJson);
         }
     }
 
     public void CreateProjectSave()
     {
-        string directoryPath = $"{Utils.ProjectPath}/{Name}";
-        Directory.CreateDirectory(directoryPath);
+        Directory.CreateDirectory(ProjectJsonPath);
     }
 
 
