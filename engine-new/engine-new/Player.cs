@@ -16,42 +16,60 @@ internal class Player : GameObject
         Name = name;
     }
 
-    public void Move(ConsoleKey key) 
+    public void Move(ConsoleKey key, List<GameObject> activeProjectGameObjects)
     {
-        int previousX = ActiveX;
-        int previousY = ActiveY;    
+        int targetX = ActiveX;
+        int targetY = ActiveY;
 
-        switch (key) 
+        switch (key)
         {
             case ConsoleKey.UpArrow:
-                ActiveY -= 1;
+                targetY -= 1;
                 break;
 
             case ConsoleKey.DownArrow:
-                ActiveY += 1;
-
+                targetY += 1;
                 break;
 
             case ConsoleKey.LeftArrow:
-                ActiveX -= 1;
-
+                targetX -= 1;
                 break;
 
             case ConsoleKey.RightArrow:
-                ActiveX += 1;
-
+                targetX += 1;
                 break;
         }
 
-        Console.SetCursorPosition(previousX, previousY);
-        Console.Write(' ');
-        Console.SetCursorPosition(ActiveX, ActiveY);
-        Console.Write(Symbol);
+        if (!IsBlockCollision(activeProjectGameObjects, targetX, targetY))
+        {
+            Console.SetCursorPosition(ActiveX, ActiveY);
+            Console.Write(' ');
+
+            ActiveX = targetX;
+            ActiveY = targetY;
+
+            Console.SetCursorPosition(ActiveX, ActiveY);
+            Console.Write(Symbol);
+        }
     }
 
-    public void ResetPlayerPosition() 
+    public void ResetPlayerPosition()
     {
         ActiveX = BasePositionX;
         ActiveY = BasePositionY;
     }
+
+    private bool IsBlockCollision(List<GameObject> activeProjectGameObjects, int targetX, int targetY)
+    {
+        foreach (GameObject obj in activeProjectGameObjects)
+        {
+            if (obj != this && obj.BasePositionX == targetX && obj.BasePositionY == targetY)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

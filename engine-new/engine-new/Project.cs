@@ -231,8 +231,8 @@ internal class Project
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.RightArrow:
 
+                    player?.Move(action.Key, ActiveScene!.GameObjects);
 
-                    player?.Move(action.Key);
                     break;
 
                 case ConsoleKey.Tab:
