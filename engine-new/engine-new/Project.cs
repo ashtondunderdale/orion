@@ -68,9 +68,13 @@ internal class Project
                     Utils.ShowMessage("\nReturning to Launcher.");
                     return;
 
-                case "sav":
+                case "sav": // add auto saving
                     SaveProject();
                     Utils.ShowMessage($"\nProject saved at: {Utils.ProjectPath}");
+                    break;
+
+                case "gn scn":
+                    GenerateProceduralScene();
                     break;
 
                 default:
@@ -153,7 +157,7 @@ internal class Project
         }
     }
 
-    public void CreateScene()
+    public Scene CreateScene()
     {
         while (true)
         {
@@ -182,7 +186,7 @@ internal class Project
             Utils.ShowMessage($"\nCreated scene '{scene.Name}'");
             Utils.CleanConsole();
 
-            break;
+            return scene;
         }
     }
 
@@ -297,39 +301,57 @@ internal class Project
         {
             string jsonContent = File.ReadAllText(filePath);
 
-            JsonSerializerSettings settings = new JsonSerializerSettings
+            JsonSerializerSettings settings = new()
             {
                 TypeNameHandling = TypeNameHandling.Auto,
                 Formatting = Formatting.Indented
             };
 
-            var loadedProjectData = JsonConvert.DeserializeObject<ProjectData>(jsonContent, settings);
+            ProjectData? loadedProjectData = JsonConvert.DeserializeObject<ProjectData>(jsonContent, settings);
 
             ClearProject();
 
-            foreach (var loadedSceneData in loadedProjectData.Scenes)
+            foreach (var loadedSceneData in loadedProjectData!.Scenes)
             {
                 Scene scene = new Scene(loadedSceneData.SceneName);
 
                 foreach (var loadedObjectData in loadedSceneData.GameObjects)
                 {
-                    GameObject obj;
+                    GameObject? obj;
 
-                    if (loadedObjectData.Contains("\"Name\": \"player\""))
-                    {
-                        obj = JsonConvert.DeserializeObject<Player>(loadedObjectData, settings);
-                    }
-                    else
-                    {
-                        obj = JsonConvert.DeserializeObject<GameObject>(loadedObjectData, settings);
-                    }
-
-                    scene.GameObjects.Add(obj);
+                    if (loadedObjectData.Contains("\"Name\": \"player\"")) obj = JsonConvert.DeserializeObject<Player>(loadedObjectData, settings);
+                    else obj = JsonConvert.DeserializeObject<GameObject>(loadedObjectData, settings);
+                    
+                    scene.GameObjects.Add(obj!);
                 }
                 Scenes.Add(scene);
             }
         }
     }
+
+    public void GenerateProceduralScene()
+    {
+        Random random = new();
+
+        Scene scene = CreateScene();
+
+        int blockPercentage = 20;
+
+        for (int y = 0; y < Console.WindowHeight; y++)
+        {
+            for (int x = 0; x < Console.WindowWidth; x++)
+            {
+                if (random.Next(100) < blockPercentage)
+                {
+                    Console.SetCursorPosition(x, y);
+                    Block block = new Block(x, y, "block");
+
+                    scene!.GameObjects.Add(block);
+                }
+            }
+        }
+    }
+
 
 
     private void ClearProject() => Scenes.Clear();
