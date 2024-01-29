@@ -58,6 +58,15 @@ internal class Project
                     PlayScene();
                     break;
 
+                case "rtn":
+                    Utils.ShowMessage("\nReturning to Launcher.");
+                    return;
+
+                case "sav":
+                    SaveProject();
+                    Utils.ShowMessage($"\nProject saved at: {Utils.ProjectPath}");
+                    break;
+
                 default:
                     Utils.ShowWarning(Message.CommandDoesNotExistWarning);
                     Utils.CleanConsole();
@@ -133,6 +142,7 @@ internal class Project
             {
                 Utils.ShowError(Message.InvalidInputWarning);
                 Utils.CleanConsole();
+                return;
             }
         }
     }
@@ -244,6 +254,33 @@ internal class Project
                     continue;
             }
         }
+    }
+
+    public void SaveProject() 
+    {
+        if (!Directory.Exists($"{Utils.ProjectPath}/{Name}"))
+        {
+            CreateProjectSave();
+            return;
+        }
+        else 
+        {
+            foreach () 
+            { 
+            
+            }
+        }
+    }
+
+    public void CreateProjectSave()
+    {
+        string directoryPath = $"{Utils.ProjectPath}/{Name}";
+        Directory.CreateDirectory(directoryPath);
+
+        string filePath = Path.Combine(directoryPath, $"{Name}.txt");
+
+        using StreamWriter sw = File.CreateText(filePath);
+        sw.WriteLine($"Hello! This is your saved project file for {Name}");
     }
 
     bool SceneExists(string sceneName) => Scenes.Any(scene => scene.Name == sceneName);
