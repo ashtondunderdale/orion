@@ -6,19 +6,19 @@ internal class Project
     public List<Scene> Scenes = new();
     public Scene? ActiveScene;
 
-    public Project(String name) 
+    public Project(String name)
     {
         Name = name;
     }
 
-    public void Initialise() 
+    public void Initialise()
     {
-        while (true) 
+        while (true)
         {
             Utils.ClearConsole();
 
             Console.WriteLine($"Project |  {Name}\n");
-            
+
             string? command = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(command))
@@ -30,7 +30,7 @@ internal class Project
 
             string mainCommand = command.Contains(' ') ? $"{command.Split(' ')[0]} {command.Split(' ')[1]}" : command;
 
-            switch (mainCommand) 
+            switch (mainCommand)
             {
                 case "cr obj":
                     CreateObject();
@@ -79,7 +79,7 @@ internal class Project
     {
         while (true)
         {
-            if (ActiveScene is null) 
+            if (ActiveScene is null)
             {
                 Utils.ShowWarning("\nActive scene must not be null to add objects.");
                 Utils.CleanConsole();
@@ -119,7 +119,7 @@ internal class Project
                 Utils.CleanConsole();
                 break;
             }
-            else if (int.TryParse(objectInput, out objectType) && objectType == 2) 
+            else if (int.TryParse(objectInput, out objectType) && objectType == 2)
             {
                 Console.WriteLine("\nEnter the X coordinate:");
                 int x = int.Parse(Console.ReadLine());
@@ -147,7 +147,7 @@ internal class Project
         }
     }
 
-    public void CreateScene() 
+    public void CreateScene()
     {
         while (true)
         {
@@ -182,7 +182,7 @@ internal class Project
 
     void SelectScene()
     {
-        if (NoScenesExist()) 
+        if (NoScenesExist())
         {
             Utils.ShowWarning(Message.ObjectDoesNotExistsWarning("scene"));
             Utils.CleanConsole();
@@ -199,14 +199,14 @@ internal class Project
 
             Utils.ShowMessage($"\nActive scene set '{ActiveScene!.Name}'");
         }
-        else Utils.ShowError(Message.ObjectDoesNotExistsWarning("scene"));      
+        else Utils.ShowError(Message.ObjectDoesNotExistsWarning("scene"));
 
         Utils.CleanConsole();
     }
 
-    public void RenderScene() 
+    public void RenderScene()
     {
-        if (ActiveScene is null) 
+        if (ActiveScene is null)
         {
             Utils.ShowWarning("\nSelect an Active Scene to render / play.");
             Utils.CleanConsole();
@@ -215,28 +215,28 @@ internal class Project
 
         Utils.ClearConsole();
 
-        foreach (GameObject obj in ActiveScene.GameObjects) 
+        foreach (GameObject obj in ActiveScene.GameObjects)
         {
             Console.SetCursorPosition(obj.BasePositionX, obj.BasePositionY);
             Console.Write(obj.Symbol);
         }
     }
 
-    public void PlayScene() 
+    public void PlayScene()
     {
         RenderScene();
 
         if (ActiveScene is null) return;
-        
+
         Player player = ActiveScene!.GameObjects.OfType<Player>().FirstOrDefault()!;
 
-        while (true) 
-        { 
+        while (true)
+        {
             var action = Console.ReadKey();
 
-            switch (action.Key) 
+            switch (action.Key)
             {
-                case ConsoleKey.UpArrow:     
+                case ConsoleKey.UpArrow:
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.RightArrow:
@@ -255,19 +255,29 @@ internal class Project
             }
         }
     }
-
-    public void SaveProject() 
+    public void SaveProject()
     {
         if (!Directory.Exists($"{Utils.ProjectPath}/{Name}"))
         {
             CreateProjectSave();
-            return;
         }
-        else 
+
+        string filePath = Path.Combine($"{Utils.ProjectPath}/{Name}", $"{Name}.txt");
+
+        using (StreamWriter sw = File.CreateText(filePath))
         {
-            foreach () 
-            { 
-            
+            sw.WriteLine($"Hello! This is your saved project file for {Name}\n\n");
+
+            foreach (Scene scene in Scenes)
+            {
+                sw.WriteLine($"Scene Name: {scene.Name}");
+
+                foreach (GameObject obj in scene.GameObjects)
+                {
+                    sw.WriteLine($"Object: {obj.Name}");
+                    sw.WriteLine($"X: {obj.BasePositionX}");
+                    sw.WriteLine($"Y: {obj.BasePositionY}");
+                }
             }
         }
     }
@@ -276,12 +286,8 @@ internal class Project
     {
         string directoryPath = $"{Utils.ProjectPath}/{Name}";
         Directory.CreateDirectory(directoryPath);
-
-        string filePath = Path.Combine(directoryPath, $"{Name}.txt");
-
-        using StreamWriter sw = File.CreateText(filePath);
-        sw.WriteLine($"Hello! This is your saved project file for {Name}");
     }
+
 
     bool SceneExists(string sceneName) => Scenes.Any(scene => scene.Name == sceneName);
 
