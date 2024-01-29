@@ -17,6 +17,8 @@ internal class Project
 
     public void Initialise()
     {
+        LoadProject();
+
         while (true)
         {
             Utils.ClearConsole();
@@ -262,10 +264,7 @@ internal class Project
 
     public void SaveProject()
     {
-        if (!Directory.Exists(ProjectJsonPath))
-        {
-            CreateProjectSave();
-        }
+        if (!Directory.Exists(ProjectJsonPath)) Directory.CreateDirectory(ProjectJsonPath);
 
         using StreamWriter sw = File.CreateText(ProjectJsonPath + $"\\{Name}.json");
         {
@@ -290,12 +289,43 @@ internal class Project
         }
     }
 
-    public void CreateProjectSave()
+    public void LoadProject()
     {
-        Directory.CreateDirectory(ProjectJsonPath);
+        string filePath = Path.Combine(ProjectJsonPath, $"{Name}.json");
+
+        if (File.Exists(filePath))
+        {
+            string jsonContent = File.ReadAllText(filePath);
+
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                Formatting = Formatting.Indented
+            };
+
+            var loadedProjectData = JsonConvert.DeserializeObject<ProjectData>(jsonContent, settings);
+
+            ClearProject();
+
+            foreach (var loadedSceneData in loadedProjectData.Scenes)
+            {
+                Scene scene = new Scene(loadedSceneData.SceneName);
+
+                foreach (var loadedObjectData in loadedSceneData.GameObjects)
+                {
+                    // Deserialize the object from its string representation
+                    GameObject obj = JsonConvert.DeserializeObject<GameObject>(loadedObjectData, settings);
+                    scene.GameObjects.Add(obj);
+                }
+
+                Scenes.Add(scene);
+            }
+        }
     }
 
 
+    private void ClearProject() => Scenes.Clear();
+    
     bool SceneExists(string sceneName) => Scenes.Any(scene => scene.Name == sceneName);
 
     void ListScenes()
@@ -311,4 +341,16 @@ internal class Project
     void SetActiveScene(Scene scene) => ActiveScene = scene;
 
     bool NoScenesExist() => Scenes.Count == 0;
+}
+
+public class ProjectData
+{
+    public string ProjectName { get; set; }
+    public List<SceneData> Scenes { get; set; }
+}
+
+public class SceneData
+{
+    public string SceneName { get; set; }
+    public List<string> GameObjects { get; set; }
 }

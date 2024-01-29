@@ -9,29 +9,17 @@ internal class Engine
 
     private static void Main() => Initialise();
 
-    public static void AddSampleObjects()
-    {
-        Project project = new("Test Project");
-        Projects.Add(project);
-
-        Scene scene = new("Test Scene");
-        project.Scenes.Add(scene);
-        project.ActiveScene = scene;
-
-        Player player = new(20, 10, "myPlayer");
-        scene.GameObjects.Add(player);
-    }
-
     private static void Initialise() 
     {
         Console.Write("Initialising Engine..");
         Console.ReadKey();
-        AddSampleObjects(); // here
         Launcher();
     }
 
     private static void Launcher() 
     {
+        LoadAllProjects();
+
         while (true)
         {
             Console.WriteLine("Orion Engine\n\n");
@@ -155,6 +143,20 @@ internal class Engine
 
         Utils.CleanConsole();
     }
+
+    public static void LoadAllProjects()
+    {
+        string[] projectDirectories = Directory.GetDirectories(Utils.ProjectPath);
+
+        foreach (string projectDirectory in projectDirectories)
+        {
+            string projectName = Path.GetFileName(projectDirectory);
+            Project project = new(projectName);
+
+            Projects.Add(project);
+        }
+    }
+
 
     static bool NoProjectsExist() => Projects.Count == 0;
 
