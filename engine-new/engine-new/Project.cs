@@ -108,6 +108,7 @@ internal class Project
             Console.WriteLine("1 |  Player\n");
             Console.WriteLine("2 |  Block\n");
             Console.WriteLine("3 |  Chaser\n");
+            Console.WriteLine("4 |  Floor\n");
 
             string? objectInput = Console.ReadLine();
 
@@ -144,7 +145,7 @@ internal class Project
             else if (int.TryParse(objectInput, out objectType) && objectType == 2)
             {
                 RenderScene();
-                PlaceBlocks();
+                PlaceChainObjects("block");
 
                 Utils.ClearConsole();
                 break;
@@ -166,6 +167,14 @@ internal class Project
                 Utils.ShowMessage($"\nCreated object '{chaser.Name}'.");
 
                 Utils.CleanConsole();
+                break;
+            }
+            else if (int.TryParse(objectInput, out objectType) && objectType == 4)
+            {
+                RenderScene();
+                PlaceChainObjects("floor");
+
+                Utils.ClearConsole();
                 break;
             }
             else
@@ -289,7 +298,7 @@ internal class Project
         }
     }
 
-    public void PlaceBlocks()
+    public void PlaceChainObjects(string objectTypeString)
     {
         ObjectPointer pointer = new(0, 0);
         Console.SetCursorPosition(0, 0);
@@ -313,13 +322,29 @@ internal class Project
                     break;
 
                 case ConsoleKey.Enter:
-                    Block block = new(pointer!.ActiveX, pointer.ActiveY, "block");
-                    ActiveScene?.GameObjects.Add(block);    
+                    GameObject? obj = null;
 
-                    Console.SetCursorPosition(pointer.ActiveX, pointer.ActiveY);
-                    Console.Write(block.Symbol);              // here make it check if the block is there, if so remove it
-                    SaveProject();
+                    if (objectTypeString == "block")
+                    {
+                        obj = new Block(pointer!.ActiveX, pointer.ActiveY, "block");
+                        ActiveScene?.GameObjects.Add(obj);
+                    }
+                    else if (objectTypeString == "floor")
+                    {
+                        obj = new Floor(pointer!.ActiveX, pointer.ActiveY, "floor");
+                        ActiveScene?.GameObjects.Add(obj);
+                    }
+
+                    if (obj is not null)
+                    {
+                        Console.SetCursorPosition(pointer.ActiveX, pointer.ActiveY);
+                        Console.Write(obj.Symbol);
+
+                        SaveProject();
+                    }
+
                     break;
+
 
                 case ConsoleKey.Tab:
                     return;

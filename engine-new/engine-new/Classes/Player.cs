@@ -57,7 +57,7 @@ internal class Player : GameObject
 
             Console.ForegroundColor = Colour;
             Console.Write(Symbol);
-            Console.ResetColor(); //d2d4
+            Console.ResetColor(); 
         }
     }
 
@@ -71,7 +71,7 @@ internal class Player : GameObject
     {
         foreach (GameObject obj in activeProjectGameObjects)
         {
-            if (obj.BasePositionX == targetX && obj.BasePositionY == targetY)
+            if (obj.BasePositionX == targetX && obj.BasePositionY == targetY && obj.Collision)
             {
                 return true;
             }
