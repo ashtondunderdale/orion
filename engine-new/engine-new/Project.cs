@@ -355,46 +355,55 @@ internal class Project
         }
     }
 
-    public void GenerateProceduralScene() 
+    public void GenerateProceduralScene()
     {
-
         Scene scene = CreateScene();
 
-        int width = 10;
-
+        int blockWidth = 20;
+        int blockHeight = 10;
         Random random = new();
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 10; i++)
         {
-            int x = random.Next(0, Console.WindowWidth - width);
-            int y = random.Next(0, Console.WindowHeight - width);
+            int x = random.Next(0, Console.WindowWidth - blockWidth);
+            int y = random.Next(0, Console.WindowHeight - blockHeight);
 
-            for (int j = 0; j < width; j++)
+            if (IsWithinTerminalBounds(x, y))
             {
-                Block block = new(x, y + j, "block");
-                scene!.GameObjects.Add(block);
-            }
+                for (int j = 0; j < blockWidth; j++)
+                {
+                    Block block = new(x + j, y, "block");
 
-            for (int k = 0; k < width; k++)
-            {
-                Block block = new(x + k, y, "block");
-                scene!.GameObjects.Add(block);
-            }
+                    if (IsWithinTerminalBounds(block.BasePositionX, block.BasePositionY)) scene!.GameObjects.Add(block);
+                }
 
-            for (int l = 0; l < width; l++)
-            {
-                Block block = new(x + l, y + width - 1, "block");
-                scene!.GameObjects.Add(block);
-            }
+                for (int k = 0; k < blockHeight; k++)
+                {
+                    Block block = new(x, y + k, "block");
 
-            for (int l = 0; l < width; l++)
-            {
-                Block block = new(x + width - 1, y + l, "block");
-                scene!.GameObjects.Add(block);
+                    if (IsWithinTerminalBounds(block.BasePositionX, block.BasePositionY)) scene!.GameObjects.Add(block);
+                }
+
+                for (int l = 0; l < blockWidth; l++)
+                {
+                    Block block = new(x + l, y + blockHeight - 1, "block");
+
+                    if (IsWithinTerminalBounds(block.BasePositionX, block.BasePositionY)) scene!.GameObjects.Add(block);
+                }
+
+                for (int m = 0; m < blockHeight; m++)
+                {
+                    Block block = new(x + blockWidth - 1, y + m, "block");
+
+                    if (IsWithinTerminalBounds(block.BasePositionX, block.BasePositionY)) scene!.GameObjects.Add(block);
+                }
             }
         }
     }
 
+
+    private static bool IsWithinTerminalBounds(int x, int y) => x >= 0 && x < Console.WindowWidth && y >= 0 && y < Console.WindowHeight;
+    
     private void ClearProject() => Scenes.Clear();
     
     bool SceneExists(string sceneName) => Scenes.Any(scene => scene.Name == sceneName);
