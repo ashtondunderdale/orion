@@ -14,6 +14,8 @@ internal class Player : GameObject
         ActiveX = BasePositionX;
         ActiveY = BasePositionY;
 
+        Collision = true;
+
         Colour = ConsoleColor.Cyan;
         Symbol = "@";
         Name = name;
@@ -55,7 +57,7 @@ internal class Player : GameObject
 
             Console.ForegroundColor = Colour;
             Console.Write(Symbol);
-            Console.ResetColor();
+            Console.ResetColor(); //d2d4
         }
     }
 
@@ -65,11 +67,11 @@ internal class Player : GameObject
         ActiveY = BasePositionY;
     }
 
-    private bool IsBlockCollision(List<GameObject> activeProjectGameObjects, int targetX, int targetY)
+    private static bool IsBlockCollision(List<GameObject> activeProjectGameObjects, int targetX, int targetY)
     {
         foreach (GameObject obj in activeProjectGameObjects)
         {
-            if (obj != this && obj.BasePositionX == targetX && obj.BasePositionY == targetY)
+            if (obj.BasePositionX == targetX && obj.BasePositionY == targetY)
             {
                 return true;
             }

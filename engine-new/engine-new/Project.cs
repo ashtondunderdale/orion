@@ -423,9 +423,9 @@ internal class Project
         Random random = new();
         Scene scene = CreateScene();
 
-        int w = 20;
-        int h = 10;
-        int s = 4;
+        int w = 12;
+        int h = 6;
+        int s = 3;
 
         int x = random.Next(0, Console.WindowWidth - w);
         int y = random.Next(0, Console.WindowHeight - w);

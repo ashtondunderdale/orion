@@ -9,4 +9,6 @@ internal class GameObject
 
     public string? Name;
     public string? Symbol;
+
+    public bool Collision;
 }
