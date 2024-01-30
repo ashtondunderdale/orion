@@ -73,7 +73,11 @@ internal class Project
                     Utils.ShowMessage($"\nProject saved at: {Utils.ProjectPath}");
                     break;
 
-                case "gn scn":
+                case "gr scn":
+                    GenerateRandomScene();
+                    break;
+
+                case "gp scn":
                     GenerateProceduralScene();
                     break;
 
@@ -313,7 +317,7 @@ internal class Project
 
             foreach (var loadedSceneData in loadedProjectData!.Scenes)
             {
-                Scene scene = new Scene(loadedSceneData.SceneName);
+                Scene scene = new(loadedSceneData.SceneName);
 
                 foreach (var loadedObjectData in loadedSceneData.GameObjects)
                 {
@@ -329,22 +333,21 @@ internal class Project
         }
     }
 
-    public void GenerateProceduralScene()
+    public void GenerateRandomScene()
     {
-        Random random = new();
-
         Scene scene = CreateScene();
-
-        int blockPercentage = 20;
 
         for (int y = 0; y < Console.WindowHeight; y++)
         {
             for (int x = 0; x < Console.WindowWidth; x++)
             {
+                Random random = new();
+                int blockPercentage = 10;
+
                 if (random.Next(100) < blockPercentage)
                 {
                     Console.SetCursorPosition(x, y);
-                    Block block = new Block(x, y, "block");
+                    Block block = new(x, y, "block");
 
                     scene!.GameObjects.Add(block);
                 }
@@ -352,7 +355,45 @@ internal class Project
         }
     }
 
+    public void GenerateProceduralScene() 
+    {
 
+        Scene scene = CreateScene();
+
+        int width = 10;
+
+        Random random = new();
+
+        for (int i = 0; i < 1; i++)
+        {
+            int x = random.Next(0, Console.WindowWidth - width);
+            int y = random.Next(0, Console.WindowHeight - width);
+
+            for (int j = 0; j < width; j++)
+            {
+                Block block = new(x, y + j, "block");
+                scene!.GameObjects.Add(block);
+            }
+
+            for (int k = 0; k < width; k++)
+            {
+                Block block = new(x + k, y, "block");
+                scene!.GameObjects.Add(block);
+            }
+
+            for (int l = 0; l < width; l++)
+            {
+                Block block = new(x + l, y + width - 1, "block");
+                scene!.GameObjects.Add(block);
+            }
+
+            for (int l = 0; l < width; l++)
+            {
+                Block block = new(x + width - 1, y + l, "block");
+                scene!.GameObjects.Add(block);
+            }
+        }
+    }
 
     private void ClearProject() => Scenes.Clear();
     
