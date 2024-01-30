@@ -43,7 +43,7 @@ internal class Player : GameObject
                 break;
         }
 
-        if (!IsBlockCollision(activeProjectGameObjects, targetX, targetY))
+        if (!IsBlockCollision(activeProjectGameObjects, targetX, targetY) && IsValidMove(targetX, targetY))
         {
             Console.SetCursorPosition(ActiveX, ActiveY);
             Console.Write(' ');
@@ -78,4 +78,13 @@ internal class Player : GameObject
         return false;
     }
 
+
+    private static bool IsValidMove(int x, int y)
+    {
+        if (x < 0 || x >= Console.WindowWidth || y < 0 || y >= Console.WindowHeight)
+        {
+            return false;
+        }
+        return true;
+    }
 }
