@@ -53,7 +53,7 @@ internal class Engine
                     return;
 
                 default:
-                    Utils.ShowError(Message.InvalidInputWarning);
+                    Utils.ShowError(Message.InvalidInputError);
                     Utils.CleanConsole();
                     continue;
             }

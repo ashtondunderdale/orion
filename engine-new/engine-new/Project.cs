@@ -170,7 +170,7 @@ internal class Project
             }
             else
             {
-                Utils.ShowError(Message.InvalidInputWarning);
+                Utils.ShowError(Message.InvalidInputError);
                 Utils.CleanConsole();
                 return;
             }

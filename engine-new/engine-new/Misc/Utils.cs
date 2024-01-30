@@ -3,6 +3,7 @@
 internal class Utils
 {
     public const string ProjectPath = @"C:\Users\adunderdale\ORION\";
+    public static string ProjectLogFilePath = "";
 
     public static void CleanConsole()
     {
@@ -17,6 +18,8 @@ internal class Utils
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine(error);
         Console.ResetColor();
+
+        Logger.Log(error);
     }
 
     public static void ShowWarning(string warning)
