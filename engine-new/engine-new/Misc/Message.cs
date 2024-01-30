@@ -9,16 +9,16 @@ public class Message
 
     public static string ObjectReferenceCanNotBeEmptyWarning(string obj)
     {
-        return $"\n{DateTime.Now} Can not use empty reference for type '{obj}' ";
+        return $"\nCan not use empty reference for type '{obj}' ";
     }
 
     public static string ObjectAlreadyExistsWarning(string obj)
     {
-        return $"\n{DateTime.Now} The type '{obj}' already exists with this name.";
+        return $"\nThe type '{obj}' already exists with this name.";
     }
 
     public static string ObjectDoesNotExistsWarning(string obj)
     {
-        return $"\n{DateTime.Now} The type '{obj}' does not exist.";
+        return $"\nThe type '{obj}' does not exist.";
     }
 }

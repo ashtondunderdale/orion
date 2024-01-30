@@ -6,21 +6,22 @@ public class Logger
 {
     public static void CreateLogFile(string projectName) 
     {
-        if (!File.Exists(Utils.ProjectPath + $"\\{projectName}" + "\\Log.txt"))
+        if (!File.Exists(Utils.ProjectPath + $"{projectName}" + "\\Log.txt"))
         {
-            using var sw = new StreamWriter(Utils.ProjectPath + $"\\{projectName}" + "\\Log.txt", true);
-            Utils.ProjectLogFilePath = Utils.ProjectPath + $"\\{projectName}" + "\\Log.txt";
+            using var sw = new StreamWriter(Utils.ProjectPath + $"{projectName}" + "\\Log.txt", true);
+            Utils.ProjectLogFilePath = Utils.ProjectPath + $"{projectName}" + "\\Log.txt";
         }
     }
 
-    public static void Log(string info) 
+    public static void Log(string info)
     {
         if (File.Exists(Utils.ProjectLogFilePath))
         {
-            using var sw = new StreamWriter(Utils.ProjectLogFilePath);
+            using var sw = new StreamWriter(Utils.ProjectLogFilePath, true);
             {
-                sw.WriteLine(info);
+                sw.WriteLine($"{DateTime.Now} {info}");
             }
         }
     }
+
 }

@@ -120,7 +120,7 @@ internal class Engine
 
             chosenProject.Initialise();
         }
-        else Utils.ShowError(Message.ObjectDoesNotExistsWarning("project"));
+        else Utils.ShowWarning(Message.ObjectDoesNotExistsWarning("project"));
 
         Utils.CleanConsole();
     }
