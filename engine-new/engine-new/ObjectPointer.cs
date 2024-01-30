@@ -43,7 +43,7 @@ internal class ObjectPointer : GameObject
         }
 
         Console.SetCursorPosition(ActiveX, ActiveY);
-        Console.Write(' ');
+        Console.Write(' '); 
 
         ActiveX = targetX;
         ActiveY = targetY;

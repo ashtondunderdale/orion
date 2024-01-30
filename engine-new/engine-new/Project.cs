@@ -138,7 +138,7 @@ internal class Project
                 RenderScene();
                 PlaceBlocks();
 
-                Utils.CleanConsole();
+                Utils.ClearConsole();
                 break;
             }
             else if (int.TryParse(objectInput, out objectType) && objectType == 3)
@@ -287,8 +287,12 @@ internal class Project
         Console.SetCursorPosition(0, 0);
         Console.Write(pointer.Symbol);
 
-        while (true) 
+        while (true)
         {
+            RenderScene();
+            Console.SetCursorPosition(pointer.ActiveX, pointer.ActiveY);
+            Console.Write(pointer.Symbol);
+
             var action = Console.ReadKey();
 
             switch (action.Key)
@@ -301,7 +305,7 @@ internal class Project
                     break;
 
                 case ConsoleKey.Enter:
-                    Block block = new(pointer.ActiveX, pointer.ActiveY, "block");
+                    Block block = new(pointer!.ActiveX, pointer.ActiveY, "block");
                     ActiveScene?.GameObjects.Add(block);    
 
                     Console.SetCursorPosition(pointer.ActiveX, pointer.ActiveY);
@@ -314,6 +318,7 @@ internal class Project
                 default: // fix so that if the user types any characters - they will not show up.
                     continue;
             }
+
         }
     }
 
