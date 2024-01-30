@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Numerics;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace engine_new;
@@ -134,19 +135,8 @@ internal class Project
             }
             else if (int.TryParse(objectInput, out objectType) && objectType == 2)
             {
-                Console.WriteLine("\nEnter the X coordinate:");
-                int x = int.Parse(Console.ReadLine());
-
-                Console.WriteLine("\nEnter the Y coordinate:");
-                int y = int.Parse(Console.ReadLine());
-
-                Console.WriteLine("\nEnter the name:");
-                string name = Console.ReadLine();
-
-                Block block = new(x, y, name);
-                ActiveScene!.GameObjects.Add(block);
-
-                Utils.ShowMessage($"\nCreated object '{block.Name}'.");
+                RenderScene();
+                PlaceBlocks();
 
                 Utils.CleanConsole();
                 break;
@@ -291,6 +281,38 @@ internal class Project
         }
     }
 
+    public void PlaceBlocks()
+    {
+        ObjectPointer pointer = new(0, 0);
+        Console.SetCursorPosition(0, 0);
+        Console.Write(pointer.Symbol);
+
+        while (true) 
+        {
+            var action = Console.ReadKey();
+
+            switch (action.Key)
+            {
+                case ConsoleKey.UpArrow:
+                case ConsoleKey.DownArrow:
+                case ConsoleKey.LeftArrow:
+                case ConsoleKey.RightArrow:
+                    pointer?.Move(action.Key);
+                    break;
+
+                case ConsoleKey.Enter:
+
+                    break;
+
+                case ConsoleKey.Tab:
+                    Utils.ClearConsole();
+                    return;
+
+                default: // fix so that if the user types any characters - they will not show up.
+                    continue;
+            }
+        }
+    }
 
     public void SaveProject()
     {

@@ -74,7 +74,6 @@ internal class Player : GameObject
                 return true;
             }
         }
-
         return false;
     }
 
