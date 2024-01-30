@@ -276,10 +276,7 @@ internal class Project
                 case ConsoleKey.DownArrow:
                 case ConsoleKey.LeftArrow:
                 case ConsoleKey.RightArrow:
-
                     player?.Move(action.Key, ActiveScene!.GameObjects);
-                    chaser?.ChasePlayer(player!);
-
                     break;
 
                 case ConsoleKey.Tab:
@@ -287,11 +284,13 @@ internal class Project
                     player?.ResetPlayerPosition();
                     return;
 
-                default: // fix so that if user types any characters - they will not show up.
+                default: // fix so that if the user types any characters - they will not show up.
                     continue;
             }
+            chaser?.ChasePlayer(player);
         }
     }
+
 
     public void SaveProject()
     {

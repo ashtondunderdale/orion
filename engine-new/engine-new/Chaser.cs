@@ -1,44 +1,66 @@
-﻿using System;
+﻿using engine_new;
+using System.Drawing;
+using System.Xml.Linq;
 
-namespace engine_new
+internal class Chaser : GameObject
 {
-    internal class Chaser : GameObject
+    private readonly Timer chaseTimer;
+    private readonly SemaphoreSlim moveSemaphore = new SemaphoreSlim(1, 1);
+
+    public int ActiveX;
+    public int ActiveY;
+
+    public Chaser(int x, int y, string name)
     {
-        public int ActiveX;
-        public int ActiveY;
+        BasePositionX = x;
+        BasePositionY = y;
+        ActiveX = BasePositionX;
+        ActiveY = BasePositionY;
 
-        public Chaser(int x, int y, string name)
+        Colour = ConsoleColor.Red;
+        Symbol = "0";
+        Name = name;
+
+        chaseTimer = new Timer(ChasePlayerCallback, null, 0, 1000);
+    }
+
+    private void ChasePlayerCallback(object state)
+    {
+        if (moveSemaphore.Wait(0))
         {
-            BasePositionX = x;
-            BasePositionY = y;
-            ActiveX = BasePositionX;
-            ActiveY = BasePositionY;
-
-            Colour = ConsoleColor.Red;
-            Symbol = "0";
-            Name = name;
+            try
+            {
+                ChasePlayer((Player)state);
+            }
+            finally
+            {
+                moveSemaphore.Release();
+            }
         }
+    }
 
-        public void ChasePlayer(Player player)
+    public void ChasePlayer(Player player)
+    {
+        if (player is not null)
         {
             int directionX = Math.Sign(player.ActiveX - ActiveX);
             int directionY = Math.Sign(player.ActiveY - ActiveY);
 
             MoveChaser(directionX, directionY);
         }
+    }
 
-        private void MoveChaser(int directionX, int directionY)
-        {
-            Console.SetCursorPosition(ActiveX, ActiveY);
-            Console.Write(' ');
+    private void MoveChaser(int directionX, int directionY)
+    {
+        Console.SetCursorPosition(ActiveX, ActiveY);
+        Console.Write(' ');
 
-            ActiveX += directionX;
-            ActiveY += directionY;
+        ActiveX += directionX;
+        ActiveY += directionY;
 
-            Console.SetCursorPosition(ActiveX, ActiveY);
-            Console.ForegroundColor = Colour;
-            Console.Write(Symbol);
-            Console.ResetColor();
-        }
+        Console.SetCursorPosition(ActiveX, ActiveY);
+        Console.ForegroundColor = Colour;
+        Console.Write(Symbol);
+        Console.ResetColor();
     }
 }
