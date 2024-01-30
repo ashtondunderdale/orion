@@ -334,6 +334,8 @@ internal class Project
     {
         if (!Directory.Exists(ProjectJsonPath)) Directory.CreateDirectory(ProjectJsonPath);
 
+        Logger.CreateLogFile(Name);
+
         using StreamWriter sw = File.CreateText(ProjectJsonPath + $"\\{Name}.json");
         {
             JsonSerializerSettings settings = new()
