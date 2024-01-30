@@ -123,10 +123,7 @@ internal class Project
                 Console.WriteLine("\nEnter the Y coordinate:");
                 int y = int.Parse(Console.ReadLine());
 
-                Console.WriteLine("\nEnter the name:");
-                string name = Console.ReadLine();
-
-                Player player = new(x, y, name);
+                Player player = new(x, y, "player");
                 ActiveScene!.GameObjects.Add(player);
 
                 Utils.ShowMessage($"\nCreated object '{player.Name}'.");
@@ -149,6 +146,25 @@ internal class Project
                 ActiveScene!.GameObjects.Add(block);
 
                 Utils.ShowMessage($"\nCreated object '{block.Name}'.");
+
+                Utils.CleanConsole();
+                break;
+            }
+            else if (int.TryParse(objectInput, out objectType) && objectType == 3)
+            {
+                Console.WriteLine("\nEnter the X coordinate:");
+                int x = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("\nEnter the Y coordinate:");
+                int y = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("\nEnter the name:");
+                string name = Console.ReadLine();
+
+                Chaser chaser = new(x, y, name);
+                ActiveScene!.GameObjects.Add(chaser);
+
+                Utils.ShowMessage($"\nCreated object '{chaser.Name}'.");
 
                 Utils.CleanConsole();
                 break;
@@ -247,6 +263,7 @@ internal class Project
         if (ActiveScene is null) return;
 
         Player player = ActiveScene!.GameObjects.OfType<Player>().FirstOrDefault()!;
+        Chaser chaser = ActiveScene!.GameObjects.OfType<Chaser>().FirstOrDefault()!;
 
         while (true)
         {
@@ -260,6 +277,8 @@ internal class Project
                 case ConsoleKey.RightArrow:
 
                     player?.Move(action.Key, ActiveScene!.GameObjects);
+
+                    chaser?.ChasePlayer();
 
                     break;
 
@@ -366,7 +385,6 @@ internal class Project
 
         int w = 20;
         int h = 10;
-
         int s = 4;
 
         int x = random.Next(0, Console.WindowWidth - w);
