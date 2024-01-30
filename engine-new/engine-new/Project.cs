@@ -104,6 +104,7 @@ internal class Project
             Console.WriteLine("\nEnter the type of game object to create.\n\n");
             Console.WriteLine("1 |  Player\n");
             Console.WriteLine("2 |  Block\n");
+            Console.WriteLine("3 |  Chaser\n");
 
             string? objectInput = Console.ReadLine();
 
@@ -277,8 +278,7 @@ internal class Project
                 case ConsoleKey.RightArrow:
 
                     player?.Move(action.Key, ActiveScene!.GameObjects);
-
-                    chaser?.ChasePlayer();
+                    chaser?.ChasePlayer(player!);
 
                     break;
 
