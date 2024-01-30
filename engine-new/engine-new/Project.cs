@@ -372,18 +372,21 @@ internal class Project
         int x = random.Next(0, Console.WindowWidth - w);
         int y = random.Next(0, Console.WindowHeight - w);
 
-        int entranceSide = random.Next(0, 4);
+        int e = random.Next(0, 4);
 
-        for (int i = 0; i < h; i++)                             // what the fuck
+        int playerX = random.Next(x + 1, x + w - 1);
+        int playerY = random.Next(y + 1, y + h - 1);
+
+        for (int i = 0; i < h; i++)
         {
             for (int j = 0; j < w; j++)
             {
                 if ((i == 0 || i == h - 1 || j == 0 || j == w - 1) &&
                     !(
-                        (entranceSide == 0 && i == 0 && j >= (w - s) / 2 && j < (w + s) / 2) ||
-                        (entranceSide == 1 && j == w - 1 && i >= (h - s) / 2 && i < (h + s) / 2) ||
-                        (entranceSide == 2 && i == h - 1 && j >= (w - s) / 2 && j < (w + s) / 2) ||
-                        (entranceSide == 3 && j == 0 && i >= (h - s) / 2 && i < (h + s) / 2) 
+                        (e == 0 && i == 0 && j >= (w - s) / 2 && j < (w + s) / 2) ||
+                        (e == 1 && j == w - 1 && i >= (h - s) / 2 && i < (h + s) / 2) ||
+                        (e == 2 && i == h - 1 && j >= (w - s) / 2 && j < (w + s) / 2) ||
+                        (e == 3 && j == 0 && i >= (h - s) / 2 && i < (h + s) / 2)
                     )
                 )
                 {
@@ -396,7 +399,10 @@ internal class Project
                 }
             }
         }
+        Player player = new(playerX, playerY, "player");
+        scene!.GameObjects.Add(player);
     }
+
 
     public void GenerateProceduralSquares()
     {
