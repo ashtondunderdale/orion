@@ -10,6 +10,9 @@ Small project, to help me understand the innerworkings of a game engine for buil
    - **Creation / Deletion of projects**
    - **Savable Projects**
 
+## Advanced Mechanics
+   - **Procedurally generated rooms**
+
 ### Misc
 
 - **Saves to a folder location as a JSON**
