@@ -346,6 +346,7 @@ internal class Project
                     GameObject? obj;
 
                     if (loadedObjectData.Contains("\"Name\": \"player\"")) obj = JsonConvert.DeserializeObject<Player>(loadedObjectData, settings);
+                    else if (loadedObjectData.Contains("\"Name\": \"chaser\"")) obj = JsonConvert.DeserializeObject<Chaser>(loadedObjectData, settings);
                     else obj = JsonConvert.DeserializeObject<GameObject>(loadedObjectData, settings);
                     
                     scene.GameObjects.Add(obj!);

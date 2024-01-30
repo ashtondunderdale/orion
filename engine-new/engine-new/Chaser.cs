@@ -21,7 +21,7 @@ internal class Chaser : GameObject
         Symbol = "0";
         Name = name;
 
-        chaseTimer = new Timer(ChasePlayerCallback, null, 0, 1000);
+        chaseTimer = new Timer(ChasePlayerCallback, null, 0, 1000); // fix this to move every 1 second max
     }
 
     private void ChasePlayerCallback(object state)
