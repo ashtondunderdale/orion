@@ -1,4 +1,6 @@
-﻿namespace engine_new;
+﻿using System.Drawing;
+
+namespace engine_new;
 
 internal class Player : GameObject
 {
@@ -12,7 +14,8 @@ internal class Player : GameObject
         ActiveX = BasePositionX;
         ActiveY = BasePositionY;
 
-        Symbol = Utils.PlayerSymbol;
+        Colour = ConsoleColor.Cyan;
+        Symbol = "@";
         Name = name;
     }
 
@@ -49,7 +52,10 @@ internal class Player : GameObject
             ActiveY = targetY;
 
             Console.SetCursorPosition(ActiveX, ActiveY);
+
+            Console.ForegroundColor = Colour;
             Console.Write(Symbol);
+            Console.ResetColor();
         }
     }
 

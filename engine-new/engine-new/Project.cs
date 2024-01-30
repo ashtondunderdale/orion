@@ -233,7 +233,10 @@ internal class Project
         foreach (GameObject obj in ActiveScene.GameObjects)
         {
             Console.SetCursorPosition(obj.BasePositionX, obj.BasePositionY);
+
+            Console.ForegroundColor = obj.Colour;
             Console.Write(obj.Symbol);
+            Console.ResetColor();
         }
     }
 
@@ -361,26 +364,26 @@ internal class Project
         Random random = new();
         Scene scene = CreateScene();
 
-        int spawnRoomWidth = 20;
-        int spawnRoomHeight = 10;
+        int w = 20;
+        int h = 10;
 
-        int exitSize = 2;
+        int s = 4;
 
-        int x = random.Next(0, Console.WindowWidth - spawnRoomWidth);
-        int y = random.Next(0, Console.WindowHeight - spawnRoomHeight);
+        int x = random.Next(0, Console.WindowWidth - w);
+        int y = random.Next(0, Console.WindowHeight - w);
 
         int entranceSide = random.Next(0, 4);
 
-        for (int i = 0; i < spawnRoomHeight; i++)
+        for (int i = 0; i < h; i++)                             // what the fuck
         {
-            for (int j = 0; j < spawnRoomWidth; j++)
+            for (int j = 0; j < w; j++)
             {
-                if ((i == 0 || i == spawnRoomHeight - 1 || j == 0 || j == spawnRoomWidth - 1) &&
+                if ((i == 0 || i == h - 1 || j == 0 || j == w - 1) &&
                     !(
-                        (entranceSide == 0 && i == 0 && j >= (spawnRoomWidth - exitSize) / 2 && j < (spawnRoomWidth + exitSize) / 2) ||
-                        (entranceSide == 1 && j == spawnRoomWidth - 1 && i >= (spawnRoomHeight - exitSize) / 2 && i < (spawnRoomHeight + exitSize) / 2) ||
-                        (entranceSide == 2 && i == spawnRoomHeight - 1 && j >= (spawnRoomWidth - exitSize) / 2 && j < (spawnRoomWidth + exitSize) / 2) ||
-                        (entranceSide == 3 && j == 0 && i >= (spawnRoomHeight - exitSize) / 2 && i < (spawnRoomHeight + exitSize) / 2)
+                        (entranceSide == 0 && i == 0 && j >= (w - s) / 2 && j < (w + s) / 2) ||
+                        (entranceSide == 1 && j == w - 1 && i >= (h - s) / 2 && i < (h + s) / 2) ||
+                        (entranceSide == 2 && i == h - 1 && j >= (w - s) / 2 && j < (w + s) / 2) ||
+                        (entranceSide == 3 && j == 0 && i >= (h - s) / 2 && i < (h + s) / 2) 
                     )
                 )
                 {
@@ -394,11 +397,6 @@ internal class Project
             }
         }
     }
-
-
-
-
-
 
     public void GenerateProceduralSquares()
     {
@@ -419,11 +417,7 @@ internal class Project
                 {
                     Block block = new(x + j, y, "block");
 
-                    if (IsWithinTerminalBounds(block.BasePositionX, block.BasePositionY)) 
-                    {
-
-                        scene!.GameObjects.Add(block);
-                    }
+                    if (IsWithinTerminalBounds(block.BasePositionX, block.BasePositionY)) scene!.GameObjects.Add(block);  
                 }
 
                 for (int k = 0; k < blockHeight; k++)
