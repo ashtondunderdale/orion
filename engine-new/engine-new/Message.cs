@@ -2,8 +2,10 @@
 
 public class Message
 {
-    public static String InvalidInputWarning = "\nInvalid Input.";
-    public static String CommandDoesNotExistWarning = "\nCommand does not exist.";
+    public const String InvalidInputWarning = "\nInvalid Input.";
+    public const String CommandDoesNotExistWarning = "\nCommand does not exist.";
+
+    public const string ObjectOutOfBoundsError = "\nObject is not within terminal x, y bounds";
 
     public static string ObjectReferenceCanNotBeEmptyWarning(string obj)
     {

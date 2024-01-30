@@ -125,6 +125,13 @@ internal class Project
                 Console.WriteLine("\nEnter the Y coordinate:");
                 int y = int.Parse(Console.ReadLine());
 
+                if (!IsWithinTerminalBounds(x, y)) 
+                {
+                    Utils.ShowError(Message.ObjectOutOfBoundsError);
+                    Utils.CleanConsole();
+                    return;
+                }
+
                 Player player = new(x, y, "player");
                 ActiveScene!.GameObjects.Add(player);
 
