@@ -301,11 +301,14 @@ internal class Project
                     break;
 
                 case ConsoleKey.Enter:
+                    Block block = new(pointer.ActiveX, pointer.ActiveY, "block");
+                    ActiveScene?.GameObjects.Add(block);    
 
+                    Console.SetCursorPosition(pointer.ActiveX, pointer.ActiveY);
+                    Console.Write(block.Symbol);
                     break;
 
                 case ConsoleKey.Tab:
-                    Utils.ClearConsole();
                     return;
 
                 default: // fix so that if the user types any characters - they will not show up.
