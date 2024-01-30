@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace engine_new;
+namespace engine_new.Classes;
 
 internal class Player : GameObject
 {

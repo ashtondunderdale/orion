@@ -1,8 +1,8 @@
-﻿namespace engine_new;
+﻿namespace engine_new.Classes;
 
 internal class Block : GameObject
 {
-    public Block(int x, int y, string name) 
+    public Block(int x, int y, string name)
     {
         Symbol = "#";
         Colour = ConsoleColor.White;

@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
+using engine_new.Classes;
 
-namespace engine_new;
+namespace engine_new.Misc;
 
 internal class ObjectPointer : GameObject
 {
@@ -43,7 +44,7 @@ internal class ObjectPointer : GameObject
         }
 
         Console.SetCursorPosition(ActiveX, ActiveY);
-        Console.Write(' '); 
+        Console.Write(' ');
 
         ActiveX = targetX;
         ActiveY = targetY;

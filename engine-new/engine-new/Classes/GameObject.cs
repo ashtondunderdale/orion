@@ -1,4 +1,4 @@
-﻿namespace engine_new;
+﻿namespace engine_new.Classes;
 
 internal class GameObject
 {
@@ -7,6 +7,6 @@ internal class GameObject
 
     public ConsoleColor Colour;
 
-    public String? Name;
-    public String? Symbol;
+    public string? Name;
+    public string? Symbol;
 }

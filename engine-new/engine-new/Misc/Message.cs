@@ -1,9 +1,9 @@
-﻿namespace engine_new;
+﻿namespace engine_new.Misc;
 
 public class Message
 {
-    public const String InvalidInputWarning = "\nInvalid Input.";
-    public const String CommandDoesNotExistWarning = "\nCommand does not exist.";
+    public const string InvalidInputWarning = "\nInvalid Input.";
+    public const string CommandDoesNotExistWarning = "\nCommand does not exist.";
 
     public const string ObjectOutOfBoundsError = "\nObject is not within terminal x, y bounds";
 
@@ -12,7 +12,7 @@ public class Message
         return $"\nCan not use empty reference for type '{obj}' ";
     }
 
-    public static string ObjectAlreadyExistsWarning(string obj) 
+    public static string ObjectAlreadyExistsWarning(string obj)
     {
         return $"\nThe type '{obj}' already exists with this name.";
     }

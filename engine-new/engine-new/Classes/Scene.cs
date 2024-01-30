@@ -1,11 +1,11 @@
-﻿namespace engine_new;
+﻿namespace engine_new.Classes;
 
 internal class Scene
 {
-    public String? Name;
+    public string? Name;
     public List<GameObject> GameObjects = new();
 
-    public Scene(string name) 
+    public Scene(string name)
     {
         Name = name;
     }

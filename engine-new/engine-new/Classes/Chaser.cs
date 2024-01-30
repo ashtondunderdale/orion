@@ -1,4 +1,4 @@
-﻿namespace engine_new;
+﻿namespace engine_new.Classes;
 
 internal class Chaser : GameObject
 {
@@ -28,7 +28,7 @@ internal class Chaser : GameObject
 
     public void ChasePlayer(Player player)
     {
-        if (player is not null) 
+        if (player is not null)
         {
             int directionX = Math.Sign(player.ActiveX - ActiveX);
             int directionY = Math.Sign(player.ActiveY - ActiveY);

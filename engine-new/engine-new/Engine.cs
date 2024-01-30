@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using engine_new.Misc;
 
 namespace engine_new;
 
@@ -82,8 +83,12 @@ internal class Engine
                 continue;
             }
 
+
             Project project = new(projectName);
             Projects.Add(project);
+
+            project.SaveProject();
+
 
             Utils.ShowMessage($"\nCreated Project '{project.Name}'");
             Utils.CleanConsole();
@@ -132,6 +137,8 @@ internal class Engine
         }
 
         ListProjects();
+        Utils.ShowWarning("Warning: this will delete your project files (not recoverable)\n");
+
         Console.Write("Enter project index to delete\n");
 
         if (int.TryParse(Console.ReadLine(), out int chosenProjectIndex) && chosenProjectIndex >= 1 && chosenProjectIndex <= Projects.Count)

@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using engine_new.Classes;
+using engine_new.Misc;
+using Newtonsoft.Json;
 using System.Numerics;
 using static System.Formats.Asn1.AsnWriter;
 
@@ -19,7 +21,7 @@ internal class Project
 
     public void Initialise()
     {
-        LoadProject();
+        LoadJsonProject();
 
         while (true)
         {
@@ -136,7 +138,6 @@ internal class Project
                 ActiveScene!.GameObjects.Add(player);
 
                 Utils.ShowMessage($"\nCreated object '{player.Name}'.");
-
                 Utils.CleanConsole();
                 break;
             }
@@ -316,7 +317,8 @@ internal class Project
                     ActiveScene?.GameObjects.Add(block);    
 
                     Console.SetCursorPosition(pointer.ActiveX, pointer.ActiveY);
-                    Console.Write(block.Symbol);
+                    Console.Write(block.Symbol);              // here make it check if the block is there, if so remove it
+                    SaveProject();
                     break;
 
                 case ConsoleKey.Tab:
@@ -325,7 +327,6 @@ internal class Project
                 default: // fix so that if the user types any characters - they will not show up.
                     continue;
             }
-
         }
     }
 
@@ -356,7 +357,7 @@ internal class Project
         }
     }
 
-    public void LoadProject()
+    public void LoadJsonProject()
     {
         string filePath = Path.Combine(ProjectJsonPath, $"{Name}.json");
 
@@ -505,7 +506,6 @@ internal class Project
         }
     }
 
-
     private static bool IsWithinTerminalBounds(int x, int y) => x >= 0 && x < Console.WindowWidth && y >= 0 && y < Console.WindowHeight;
     
     private void ClearProject() => Scenes.Clear();
@@ -525,16 +525,4 @@ internal class Project
     void SetActiveScene(Scene scene) => ActiveScene = scene;
 
     bool NoScenesExist() => Scenes.Count == 0;
-}
-
-public class ProjectData
-{
-    public string ProjectName { get; set; }
-    public List<SceneData> Scenes { get; set; }
-}
-
-public class SceneData
-{
-    public string SceneName { get; set; }
-    public List<string> GameObjects { get; set; }
 }
