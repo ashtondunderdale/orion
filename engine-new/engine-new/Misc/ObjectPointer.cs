@@ -43,16 +43,28 @@ internal class ObjectPointer : GameObject
                 break;
         }
 
-        Console.SetCursorPosition(ActiveX, ActiveY);
-        Console.Write(' ');
+        if (IsValidMove(targetX, targetY))
+        {
+            Console.SetCursorPosition(ActiveX, ActiveY);
+            Console.Write(' ');
 
-        ActiveX = targetX;
-        ActiveY = targetY;
+            ActiveX = targetX;
+            ActiveY = targetY;
 
-        Console.SetCursorPosition(ActiveX, ActiveY);
+            Console.SetCursorPosition(ActiveX, ActiveY);
 
-        Console.ForegroundColor = Colour;
-        Console.Write(Symbol);
-        Console.ResetColor();
+            Console.ForegroundColor = Colour;
+            Console.Write(Symbol);
+            Console.ResetColor();
+        }
+    }
+
+    private static bool IsValidMove(int x, int y)
+    {
+        if (x < 0 || x >= Console.WindowWidth || y < 0 || y >= Console.WindowHeight)
+        {
+            return false;
+        }
+        return true;
     }
 }

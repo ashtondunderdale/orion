@@ -307,8 +307,12 @@ internal class Project
         while (true)
         {
             RenderScene();
-            Console.SetCursorPosition(pointer.ActiveX, pointer.ActiveY);
-            Console.Write(pointer.Symbol);
+
+            if (IsValidMove(pointer.ActiveX, pointer.ActiveY)) 
+            {
+                Console.SetCursorPosition(pointer.ActiveX, pointer.ActiveY);
+                Console.Write(pointer.Symbol);
+            }
 
             var action = Console.ReadKey();
 
@@ -475,10 +479,7 @@ internal class Project
                 {
                     Block block = new(x + j, y + i, "block");
 
-                    if (IsWithinTerminalBounds(block.BasePositionX, block.BasePositionY))
-                    {
-                        scene!.GameObjects.Add(block);
-                    }
+                    if (IsWithinTerminalBounds(block.BasePositionX, block.BasePositionY)) scene!.GameObjects.Add(block);                 
                 }
             }
         }
@@ -552,4 +553,13 @@ internal class Project
     void SetActiveScene(Scene scene) => ActiveScene = scene;
 
     bool NoScenesExist() => Scenes.Count == 0;
+
+    private static bool IsValidMove(int x, int y)
+    {
+        if (x < 0 || x >= Console.WindowWidth || y < 0 || y >= Console.WindowHeight)
+        {
+            return false;
+        }
+        return true;
+    }
 }
