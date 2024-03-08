@@ -1,6 +1,6 @@
 ﻿namespace orion;
 
-class Engine 
+class Engine
 {
 
 }

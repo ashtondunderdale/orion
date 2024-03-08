@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
 
 namespace orion;
 
@@ -14,7 +15,8 @@ internal class Launcher
         Console.WriteLine("Loading Projects...");
         Console.ReadKey();
 
-        DisplayMenuOptions(new List<string>() { "Create", "Load", "Delete" }, " --> Orion <--");
+        DisplayMenuOptions(new List<string>() { "Create", "View", "Load", "Delete" }, "  < Orion >  ");
+        DisplayLoadingIcon(10);
     }
 
     static void DisplayMenuOptions(List<string> options, string header)
@@ -30,26 +32,12 @@ internal class Launcher
 
             for (int i = 0; i < options.Count; i++)
             {
-                if (activeOptionIndex == i)
-                {
-                    if (selectedOption)
-                    {
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine($"\n > {options[i]}\n");
+                Console.ForegroundColor = activeOptionIndex == i ? 
+                    (selectedOption ? ConsoleColor.White : ConsoleColor.Gray) : ConsoleColor.DarkGray;
 
-                        DisplayLoadingIcon();
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                        Console.WriteLine($"\n > {options[i]}\n");
-                    }
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine(options[i]);
-                }
+                Console.WriteLine(activeOptionIndex == i ? $"\n > {options[i]}\n" : options[i]);
+
+                if (activeOptionIndex == i && selectedOption) return;
             }
 
             ConsoleKeyInfo input = Console.ReadKey();
@@ -69,19 +57,18 @@ internal class Launcher
         }
     }
 
-    static void DisplayLoadingIcon()
+    static void DisplayLoadingIcon(int repetitions)
     {
         Console.ForegroundColor = ConsoleColor.White;
-
         string[] loadingSymbols = { "|", "/", "-", "\\" };
-        int currentIndex = 0;
 
-        while (true)
+        int currentIndex = 0;
+        for (int iteration = 0; iteration < repetitions; iteration++)
         {
-            Console.Write(" \r" + loadingSymbols[currentIndex]);
-            currentIndex = (currentIndex + 1) % loadingSymbols.Length; 
+            Console.Write(" \r" + loadingSymbols[currentIndex++ % loadingSymbols.Length]);
             Thread.Sleep(100);
         }
     }
+
 }
 
