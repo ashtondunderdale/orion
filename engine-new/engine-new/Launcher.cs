@@ -1,10 +1,13 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-
-namespace orion;
+﻿namespace orion;
 
 internal class Launcher
 {
+    static List<Project> Projects = new();
+
+    static ConsoleColor Gray = ConsoleColor.Gray;
+    static ConsoleColor DarkGray = ConsoleColor.DarkGray;
+    static ConsoleColor White = ConsoleColor.White;
+    static ConsoleColor ErrorColour = ConsoleColor.Yellow;
     static void Main()
     {
         Initialise();
@@ -15,11 +18,96 @@ internal class Launcher
         Console.WriteLine("Loading Projects...");
         Console.ReadKey();
 
-        DisplayMenuOptions(new List<string>() { "Create", "View", "Load", "Delete" }, "  < Orion >  ");
-        DisplayLoadingIcon(10);
+        while (true) 
+        {
+            string option = DisplayMenuOptions(new List<string>() { "Create", "View", "Load", "Delete", "Settings" }, "  < Orion >  ");
+            DisplayLoadingIcon(4);
+
+            switch (option)
+            {
+                case "Create":
+                    CreateProject();
+                    break;
+
+                case "View":
+                    ViewProjects();
+                    break;
+
+                case "Load":
+                    LoadProject();
+                    break;
+
+                case "Delete":
+                    DeleteProject();
+                    break;
+            }
+        }
     }
 
-    static void DisplayMenuOptions(List<string> options, string header)
+    static void CreateProject() 
+    {
+        while (true) 
+        {
+            Console.Clear();
+
+            Console.ForegroundColor = Gray;
+            Console.WriteLine("enter a name for your project\n\n  >");
+
+            Console.ForegroundColor = DarkGray;
+            Console.SetCursorPosition(4, 2);
+            string? projectName = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(projectName))
+            {
+                DisplayErrorMessage("project name can not be empty");
+                continue;
+            }
+
+            if (projectName.Length > 16) 
+            {
+                DisplayErrorMessage("project name must be less than 16 characters");
+                continue;
+            }
+
+            Project project = new(projectName, DateTime.Now);
+            Projects.Add(project);
+
+            // "would you like to view this project now?"
+
+            return;
+        }
+    }
+
+    static void ViewProjects()
+    {
+        Console.Clear();
+
+        Console.ForegroundColor = Gray;
+        Console.WriteLine("projects\n\n");
+
+        for (int i = 0; i < Projects.Count; i++)
+        {
+            Console.ForegroundColor = White;
+            Console.Write($" {Projects[i].Name,-16}   ");
+
+            Console.ForegroundColor = DarkGray;
+            Console.Write($"{Projects[i].CreationDate}\n");
+        }
+
+        Console.ReadKey();
+    }
+
+    static void LoadProject()
+    {
+
+    }
+
+    static void DeleteProject()
+    {
+
+    }
+
+    static string DisplayMenuOptions(List<string> options, string header)
     {
         int activeOptionIndex = 0;
         bool selectedOption = false;
@@ -27,17 +115,21 @@ internal class Launcher
         while (true)
         {
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ForegroundColor = White;
             Console.WriteLine($"{header}\n");
 
             for (int i = 0; i < options.Count; i++)
             {
                 Console.ForegroundColor = activeOptionIndex == i ? 
-                    (selectedOption ? ConsoleColor.White : ConsoleColor.Gray) : ConsoleColor.DarkGray;
+                    (selectedOption ? White : Gray) : DarkGray;
 
-                Console.WriteLine(activeOptionIndex == i ? $"\n > {options[i]}\n" : options[i]);
+                Console.WriteLine(activeOptionIndex == i ? $"\n  > {options[i]}\n" : options[i]);
 
-                if (activeOptionIndex == i && selectedOption) return;
+                if (activeOptionIndex == i && selectedOption) 
+                {
+                    Console.ForegroundColor = Gray;
+                    return options[i];
+                }
             }
 
             ConsoleKeyInfo input = Console.ReadKey();
@@ -59,7 +151,7 @@ internal class Launcher
 
     static void DisplayLoadingIcon(int repetitions)
     {
-        Console.ForegroundColor = ConsoleColor.White;
+        Console.ForegroundColor = White;
         string[] loadingSymbols = { "|", "/", "-", "\\" };
 
         int currentIndex = 0;
@@ -70,5 +162,11 @@ internal class Launcher
         }
     }
 
+    static void DisplayErrorMessage(string message) 
+    {
+        Console.ForegroundColor = ErrorColour;
+        Console.Write($"\n\n  {message}");
+        Console.ReadKey();
+    }
 }
 
