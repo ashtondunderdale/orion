@@ -1,4 +1,6 @@
-﻿namespace orion;
+﻿using System.Reflection.PortableExecutable;
+
+namespace orion;
 
 internal class Launcher
 {
@@ -15,13 +17,9 @@ internal class Launcher
 
     static void Initialise() 
     {
-        Console.WriteLine("Loading Projects...");
-        Console.ReadKey();
-
         while (true) 
         {
-            string option = DisplayMenuOptions(new List<string>() { "Create", "View", "Load", "Delete", "Settings" }, "  < Orion >  ");
-            DisplayLoadingIcon(4);
+            string option = DisplayMenuOptions(new List<string>() { "Create", "View", "Load", "Delete", "Settings", "Help", "Exit" }, "  < Orion >  ");
 
             switch (option)
             {
@@ -35,6 +33,7 @@ internal class Launcher
 
                 case "Load":
                     LoadProject();
+                    DisplayLoadingIcon(4);
                     break;
 
                 case "Delete":
@@ -69,6 +68,12 @@ internal class Launcher
                 continue;
             }
 
+            if (Projects.Any(project => project.Name == projectName))
+            {
+                DisplayErrorMessage("a project with that name already exists");
+                continue;
+            }
+
             Project project = new(projectName, DateTime.Now);
             Projects.Add(project);
 
@@ -99,12 +104,23 @@ internal class Launcher
 
     static void LoadProject()
     {
-
     }
 
     static void DeleteProject()
     {
+        List<string> projectNames = new();
 
+        foreach (var project in Projects) 
+        {
+            projectNames.Add(project.Name!);
+        }
+
+        string projectNameToDelete = DisplayMenuOptions(projectNames, "choose a project to delete");
+
+        // are you sure?
+
+        Project projectToDelete = Projects.Where(project => project.Name == projectNameToDelete).FirstOrDefault()!;
+        Projects.Remove(projectToDelete);
     }
 
     static string DisplayMenuOptions(List<string> options, string header)
