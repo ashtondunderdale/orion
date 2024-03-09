@@ -9,6 +9,7 @@ internal class Display
     public static ConsoleColor InfoColour = ConsoleColor.Cyan;
     public static ConsoleColor ErrorColour = ConsoleColor.Red;
     public static ConsoleColor WarningColour = ConsoleColor.Yellow;
+    public static ConsoleColor PointerColour = ConsoleColor.Yellow;
 
     public static void Message(string message)
     {

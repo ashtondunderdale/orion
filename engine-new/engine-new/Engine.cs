@@ -116,12 +116,9 @@ class Engine
         Scene scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == sceneName)!;
 
         Console.Clear();
-        Console.Write(scene.Name);
 
-        foreach (var obj in scene.Objects) 
-        {
-            Console.Write(obj.Type);
-        }       
+        Console.Write(scene.Name);
+        Console.Write(scene.Objects.Count);         
 
         Console.ReadKey();
 

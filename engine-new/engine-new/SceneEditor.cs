@@ -10,16 +10,16 @@ internal class SceneEditor
 
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "create object", "return" }, Engine.ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "create object", "remove object", "return" }, Engine.ProjectContext!.Name!);
 
             switch (option)
             {
                 case "create object":
-                    CreateObject();
+                    ModifySceneObjects("create");
                     break;
 
                 case "remove object":
-                    RemoveObject();
+                    ModifySceneObjects("delete");
                     break;
 
                 case "play":
@@ -36,7 +36,7 @@ internal class SceneEditor
 
     }
 
-    static void CreateObject()
+    static void ModifySceneObjects(string action) 
     {
         Console.Clear();
 
@@ -50,6 +50,7 @@ internal class SceneEditor
         int objPointerY = 0;
 
         Console.SetCursorPosition(objPointerX, objPointerY);
+        Console.ForegroundColor = Display.PointerColour;
         Console.Write("X");
 
         while (true)
@@ -59,13 +60,17 @@ internal class SceneEditor
 
             ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-            if (SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY))
+            bool pointerOnObject = SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY);
+
+            if (pointerOnObject)
             {
                 var obj = SceneContext.Objects.FirstOrDefault(obj => obj.X == objPointerX && obj.Y == objPointerY);
+
                 Console.SetCursorPosition(objPointerX, objPointerY);
+                Console.ForegroundColor = Display.White;
                 Console.Write(obj!.Symbol);
             }
-            else
+            else if (!pointerOnObject)
             {
                 Console.SetCursorPosition(previousX, previousY);
                 Console.Write(' ');
@@ -89,12 +94,35 @@ internal class SceneEditor
             }
             else if (keyInfo.Key == ConsoleKey.Enter)
             {
-                Block block = new(objPointerX, objPointerY);
+                if (action == "create")
+                {
+                    if (SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY))
+                    {
+                        continue;
+                    }
 
-                Console.SetCursorPosition(objPointerX, objPointerY);
-                Console.Write(block.Symbol);
+                    Block block = new(objPointerX, objPointerY);
 
-                SceneContext.Objects.Add(block);
+                    Console.SetCursorPosition(objPointerX, objPointerY);
+                    Console.ForegroundColor = Display.White;
+                    Console.Write(block.Symbol);
+
+                    SceneContext.Objects.Add(block);
+                }
+                else 
+                {
+                    Voxel obj = SceneContext.Objects.FirstOrDefault(obj => obj.X == objPointerX && obj.Y == objPointerY)!;
+
+                    if (obj is null) 
+                    {
+                        continue;
+                    }
+
+                    SceneContext.Objects.Remove(obj);
+
+                    Console.SetCursorPosition(obj.X, obj.Y);
+                    Console.Write(' ');
+                }
             }
             else if (keyInfo.Key == ConsoleKey.Tab)
             {
@@ -103,13 +131,8 @@ internal class SceneEditor
             }
 
             Console.SetCursorPosition(objPointerX, objPointerY);
+            Console.ForegroundColor = Display.PointerColour;
             Console.Write('X');
         }
-    }
-
-
-    static void RemoveObject()
-    {
-
     }
 }
