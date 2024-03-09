@@ -1,11 +1,9 @@
-﻿using static System.Formats.Asn1.AsnWriter;
-
-namespace orion;
+﻿namespace orion;
 
 class Engine
 {
-    static Project? ProjectContext;
-    static Scene? SceneContext;
+    public static Project? ProjectContext;
+    public static Scene? SceneContext;
 
     public static void CreateProjectContext(Project project)
     {
@@ -20,21 +18,27 @@ class Engine
     {
         while (true) 
         {
-            string commandChoice = Display.Menu(new List<string>() { "create scene", "load scene", "inspect scene" }, ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "create", "load", "inspect", "play", "return" }, ProjectContext!.Name!);
 
-            switch (commandChoice)
+            switch (option)
             {
-                case "create scene":
+                case "create":
                     CreateScene();
                     break;
 
-                case "load scene":
+                case "load":
                     LoadScene();
                     break;
 
-                case "inspect scene":
+                case "inspect":
                     InspectScene();
                     break;
+
+                case "play":
+                    PlayProject();
+                    break;
+
+                case "return": return;
             }
         }
     }
@@ -88,7 +92,8 @@ class Engine
         string sceneName = Display.Menu(scenes!, "choose a scene to load");
         Scene scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == sceneName)!;
 
-        CreateSceneContext(scene);
+        SceneContext = scene;
+        SceneMenu();
     }
 
     static void InspectScene()
@@ -113,17 +118,39 @@ class Engine
         Console.Clear();
         Console.Write(scene.Name);
 
+        foreach (var obj in scene.Objects) 
+        {
+            Console.Write(obj.Type);
+        }       
+
         Console.ReadKey();
 
         return;
+    }
+
+    static void PlayProject() 
+    {
 
     }
 
-    public static void CreateSceneContext(Scene scene)
+    static void SceneMenu() 
     {
-        SceneContext = scene;
+        while (true)
+        {
+            string option = Display.Menu(new List<string>() { "scene editor", "play", "return" }, ProjectContext!.Name!);
 
-        Console.WriteLine(scene.Name);
-        Console.ReadKey();
+            switch (option)
+            {
+                case "scene editor":
+                    SceneEditor.Menu();
+                    break;
+
+                case "play":
+                    SceneEditor.PlayScene();
+                    break;
+
+                case "return": return;
+            }
+        }
     }
 }

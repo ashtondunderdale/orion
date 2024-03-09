@@ -60,7 +60,7 @@ internal class Display
             for (int i = 0; i < options.Count; i++)
             {
                 Console.ForegroundColor = activeOptionIndex == i ?
-                    (selectedOption ? White : Gray) : DarkGray;
+                    selectedOption ? White : Gray : DarkGray;
 
                 Console.WriteLine(activeOptionIndex == i ? $"\n  > {options[i]}\n" : options[i]);
 

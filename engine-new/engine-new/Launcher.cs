@@ -8,21 +8,27 @@ internal class Launcher
     {
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "Create", "View", "Load", "Delete", "Settings", "Help", "Exit" }, "  < Orion >  ");
+            string option = Display.Menu(new List<string>() { "create", "view", "load", "delete", "settings", "help", "exit" }, "  < Orion >  ");
 
             switch (option)
             {
-                case "Create": CreateProject();
+                case "create": 
+                    CreateProject();
                     break;
 
-                case "View": ViewProjects();
+                case "view": 
+                    ViewProjects();
                     break;
 
-                case "Load": LoadProject();
+                case "load": 
+                    LoadProject();
                     break;
 
-                case "Delete": DeleteProject();
+                case "delete": 
+                    DeleteProject();
                     break;
+
+                case "exit": return;
             }
         }
     }
