@@ -4,6 +4,8 @@ internal class Voxel
 {
     public string? Type { get; set; }
 
+    public char Symbol { get; set; }
+
     public int X { get; set; }
 
     public int Y { get; set; }
