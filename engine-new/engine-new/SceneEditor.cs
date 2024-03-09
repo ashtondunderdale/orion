@@ -59,8 +59,17 @@ internal class SceneEditor
 
             ConsoleKeyInfo keyInfo = Console.ReadKey();
 
-            Console.SetCursorPosition(previousX, previousY);
-            Console.Write(' ');
+            if (SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY))
+            {
+                var obj = SceneContext.Objects.FirstOrDefault(obj => obj.X == objPointerX && obj.Y == objPointerY);
+                Console.SetCursorPosition(objPointerX, objPointerY);
+                Console.Write(obj!.Symbol);
+            }
+            else
+            {
+                Console.SetCursorPosition(previousX, previousY);
+                Console.Write(' ');
+            }
 
             if (keyInfo.Key == ConsoleKey.UpArrow && objPointerY > 0)
             {
@@ -78,9 +87,13 @@ internal class SceneEditor
             {
                 objPointerX++;
             }
-            else if (keyInfo.Key == ConsoleKey.Enter) 
+            else if (keyInfo.Key == ConsoleKey.Enter)
             {
                 Block block = new(objPointerX, objPointerY);
+
+                Console.SetCursorPosition(objPointerX, objPointerY);
+                Console.Write(block.Symbol);
+
                 SceneContext.Objects.Add(block);
             }
             else if (keyInfo.Key == ConsoleKey.Tab)
@@ -93,6 +106,7 @@ internal class SceneEditor
             Console.Write('X');
         }
     }
+
 
     static void RemoveObject()
     {
