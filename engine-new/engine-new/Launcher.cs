@@ -71,7 +71,7 @@ internal class Launcher
 
             if (loadProject == "yes") 
             {
-                Engine.CreateProjectContext(project);
+                Engine.ProjectMenu(project);
             }
 
             return;
@@ -119,9 +119,12 @@ internal class Launcher
         List<string?> projects = Projects.Select(project => project.Name).ToList();
 
         string projectName = Display.Menu(projects!, "choose a project to load");
+
+        if (projectName == "") return;
+
         Project project = Projects.FirstOrDefault(project => project.Name == projectName)!;
 
-        Engine.CreateProjectContext(project);
+        Engine.ProjectMenu(project);
     }
 
     static void DeleteProject()
@@ -135,6 +138,8 @@ internal class Launcher
         List<string?> projects = Projects.Select(project => project.Name).ToList();
 
         string projectNameToDelete = Display.Menu(projects!, "choose a project to delete");
+
+        if (projectNameToDelete == "") return;
 
         string deleteConfirmation = Display.Menu(new List<string>() { "yes", "no" }, $"are you sure you want to delete {projectNameToDelete}?");
 

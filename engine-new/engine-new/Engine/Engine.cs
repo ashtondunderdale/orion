@@ -3,19 +3,11 @@
 class Engine
 {
     public static Project? ProjectContext;
-    public static Scene? SceneContext;
 
-    public static void CreateProjectContext(Project project)
+    public static void ProjectMenu(Project project)
     {
-        Display.LoadingIcon(4);
-        Console.Clear();
-
         ProjectContext = project;
-        ProjectMenu();
-    }
 
-    static void ProjectMenu() 
-    {
         while (true) 
         {
             string option = Display.Menu(new List<string>() { "create", "load", "inspect", "play", "return" }, ProjectContext!.Name!);
@@ -90,10 +82,12 @@ class Engine
         List<string?> scenes = ProjectContext!.Scenes.Select(scene => scene.Name).ToList();
 
         string sceneName = Display.Menu(scenes!, "choose a scene to load");
+
+        if (sceneName == "") return;
+
         Scene scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == sceneName)!;
 
-        SceneContext = scene;
-        SceneMenu();
+        SceneEditor.SceneMenu(scene!);
     }
 
     static void InspectScene()
@@ -113,12 +107,15 @@ class Engine
         List<string?> scenes = ProjectContext!.Scenes.Select(scene => scene.Name).ToList();
 
         string sceneName = Display.Menu(scenes!, "choose a scene to inspect");
+
+        if (sceneName == "") return;
+
         Scene scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == sceneName)!;
 
         Console.Clear();
 
-        Console.Write(scene.Name);
-        Console.Write(scene.Objects.Count);         
+        Console.Write($"{scene.Name}\n");
+        Console.Write($"Object Count: {scene.Objects.Count}");         
 
         Console.ReadKey();
 
@@ -128,26 +125,5 @@ class Engine
     static void PlayProject() 
     {
 
-    }
-
-    static void SceneMenu() 
-    {
-        while (true)
-        {
-            string option = Display.Menu(new List<string>() { "scene editor", "play", "return" }, ProjectContext!.Name!);
-
-            switch (option)
-            {
-                case "scene editor":
-                    SceneEditor.Menu(SceneContext!);
-                    break;
-
-                case "play":
-                    SceneEditor.PlayScene();
-                    break;
-
-                case "return": return;
-            }
-        }
     }
 }

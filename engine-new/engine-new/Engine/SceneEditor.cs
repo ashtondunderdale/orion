@@ -1,25 +1,26 @@
-﻿namespace orion;
+﻿using static System.Formats.Asn1.AsnWriter;
+
+namespace orion;
 
 internal class SceneEditor
 {
     static Scene? SceneContext;
 
-    public static void Menu(Scene scene)
+    public static void SceneMenu(Scene scene)
     {
         SceneContext = scene;
 
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "create object", "remove object", "return" }, Engine.ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "scene editor", "play", "render", "return" }, SceneContext!.Name!);
 
             switch (option)
             {
-                case "create object":
-                    ModifySceneObjects("create");
+                case "scene editor":
+                    SceneEditorMenu();
                     break;
 
-                case "remove object":
-                    ModifySceneObjects("delete");
+                case "render":
                     break;
 
                 case "play":
@@ -31,9 +32,37 @@ internal class SceneEditor
         }
     }
 
-    public static void PlayScene()
+    public static void SceneEditorMenu()
     {
+        while (true)
+        {
+            string option = Display.Menu(new List<string>() { "create object", "remove object", "add preset object", "return" }, Engine.ProjectContext!.Name!);
 
+            switch (option)
+            {
+                case "create object":
+                    ModifySceneObjects("create");
+                    break;
+
+                case "remove object":
+                    ModifySceneObjects("delete");
+                    break;
+
+                case "add preset object":
+
+                    string obj = Display.Menu(new List<string>() { "create player" }, "choose an object to add");
+
+                    ModifySceneObjects(obj);
+                    break;
+
+                case "play":
+                    PlayScene();
+                    break;
+
+
+                case "return": return;
+            }
+        }
     }
 
     static void ModifySceneObjects(string action) 
@@ -94,12 +123,16 @@ internal class SceneEditor
             }
             else if (keyInfo.Key == ConsoleKey.Enter)
             {
+                if (action == "create player")
+                {
+                    Player player = new(objPointerX, objPointerY);
+                    SceneContext.Objects.Add(player);
+                    return;
+                }
+
                 if (action == "create")
                 {
-                    if (SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY))
-                    {
-                        continue;
-                    }
+                    if (SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY)) continue;
 
                     Block block = new(objPointerX, objPointerY);
 
@@ -113,10 +146,7 @@ internal class SceneEditor
                 {
                     Voxel obj = SceneContext.Objects.FirstOrDefault(obj => obj.X == objPointerX && obj.Y == objPointerY)!;
 
-                    if (obj is null) 
-                    {
-                        continue;
-                    }
+                    if (obj is null) continue;                  
 
                     SceneContext.Objects.Remove(obj);
 
@@ -133,6 +163,41 @@ internal class SceneEditor
             Console.SetCursorPosition(objPointerX, objPointerY);
             Console.ForegroundColor = Display.PointerColour;
             Console.Write('X');
+        }
+    }
+
+    public static void PlayScene()
+    {
+        if (SceneContext!.Objects.FirstOrDefault(obj => obj is Player) is not Player player)
+        {
+            Display.Warning("player is null");
+            return;
+        }
+
+        Console.Clear();
+
+        foreach (var obj in SceneContext.Objects)
+        {
+            Console.SetCursorPosition(obj.X, obj.Y);
+            Console.Write(obj.Symbol);
+        }
+
+        while (true)
+        {
+            ConsoleKeyInfo direction;
+
+            if (player.Scripts.Any(script => script is Movement))
+            {
+                direction = Console.ReadKey(true);
+
+                Movement.MovementScript(player, direction);
+
+                if (direction.Key == ConsoleKey.Tab)
+                {
+                    break;
+                }
+
+            }
         }
     }
 }

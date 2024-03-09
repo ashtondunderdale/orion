@@ -6,7 +6,12 @@ internal class Voxel
 
     public char Symbol { get; set; }
 
+    public ConsoleColor Colour { get; set; }
+
     public int X { get; set; }
 
     public int Y { get; set; }
+
+
+    public List<Script> Scripts = new();
 }
