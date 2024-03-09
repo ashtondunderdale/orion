@@ -5,8 +5,32 @@ internal class Display
     public static ConsoleColor Gray = ConsoleColor.Gray;
     public static ConsoleColor DarkGray = ConsoleColor.DarkGray;
     public static ConsoleColor White = ConsoleColor.White;
+
+    public static ConsoleColor InfoColour = ConsoleColor.Cyan;
     public static ConsoleColor ErrorColour = ConsoleColor.Red;
-    public static ConsoleColor InfoColour = ConsoleColor.Yellow;
+    public static ConsoleColor WarningColour = ConsoleColor.Yellow;
+
+    public static void Message(string message)
+    {
+        Console.ForegroundColor = InfoColour;
+        Console.Write($"\n\n  {message}");
+        Console.ReadKey();
+    }
+
+    public static void Warning(string message)
+    {
+        Console.ForegroundColor = WarningColour;
+        Console.Write($"\n\n  {message}");
+        Console.ReadKey();
+    }
+
+    public static void Error(string message)
+    {
+        Console.ForegroundColor = ErrorColour;
+        Console.Write($"\n\n  {message}");
+        Console.ReadKey();
+    }
+
     public static void LoadingIcon(int repetitions)
     {
         Console.ForegroundColor = White;
@@ -21,21 +45,6 @@ internal class Display
             Thread.Sleep(100);
         }
     }
-
-    public static void ErrorMessage(string message)
-    {
-        Console.ForegroundColor = ErrorColour;
-        Console.Write($"\n\n  {message}");
-        Console.ReadKey();
-    }
-
-    public static void Message(string message)
-    {
-        Console.ForegroundColor = InfoColour;
-        Console.Write($"\n\n  {message}");
-        Console.ReadKey();
-    }
-
 
     public static string Menu(List<string> options, string header)
     {

@@ -1,6 +1,4 @@
-﻿using System.Reflection.PortableExecutable;
-
-namespace orion;
+﻿namespace orion;
 
 internal class Launcher
 {
@@ -44,26 +42,31 @@ internal class Launcher
 
             if (string.IsNullOrEmpty(projectName))
             {
-                Display.ErrorMessage("project name can not be empty");
+                Display.Warning("project name can not be empty");
                 continue;
             }
 
             if (projectName.Length > 16) 
             {
-                Display.ErrorMessage("project name must be less than 16 characters");
+                Display.Warning("project name must be less than 16 characters");
                 continue;
             }
 
             if (Projects.Any(project => project.Name == projectName))
             {
-                Display.ErrorMessage("a project with that name already exists");
+                Display.Warning("a project with that name already exists");
                 continue;
             }
 
             Project project = new(projectName, DateTime.Now);
             Projects.Add(project);
 
-            // "would you like to view this project now?"
+            string loadProject = Display.Menu(new List<string>() { "yes", "no" }, "would you like to load this project now?");
+
+            if (loadProject == "yes") 
+            {
+                Engine.CreateProjectContext(project);
+            }
 
             return;
         }
@@ -73,7 +76,7 @@ internal class Launcher
     {
         if (Projects.Count == 0) 
         {
-            Display.Message("no projects found");
+            Display.Warning("no projects found");
             return;
         }
 
@@ -98,7 +101,7 @@ internal class Launcher
     {
         if (Projects.Count == 0)
         {
-            Display.Message("no projects found");
+            Display.Warning("no projects found");
             return;
         }
 
@@ -109,16 +112,17 @@ internal class Launcher
 
         List<string?> projects = Projects.Select(project => project.Name).ToList();
 
-        string project = Display.Menu(projects!, "choose a project to load");
+        string projectName = Display.Menu(projects!, "choose a project to load");
+        Project project = Projects.FirstOrDefault(project => project.Name == projectName)!;
 
-        Display.LoadingIcon(6);
+        Engine.CreateProjectContext(project);
     }
 
     static void DeleteProject()
     {
         if (Projects.Count == 0)
         {
-            Display.Message("no projects found");
+            Display.Warning("no projects found");
             return;
         }
 
