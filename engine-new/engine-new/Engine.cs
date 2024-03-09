@@ -1,8 +1,11 @@
-﻿namespace orion;
+﻿using static System.Formats.Asn1.AsnWriter;
+
+namespace orion;
 
 class Engine
 {
     static Project? ProjectContext;
+    static Scene? SceneContext;
 
     public static void CreateProjectContext(Project project)
     {
@@ -15,18 +18,24 @@ class Engine
 
     static void ProjectMenu() 
     {
-        string commandChoice = Display.Menu(new List<string>() { "create scene", "load scene", "inspect scene" }, ProjectContext!.Name!);
-
-        switch (commandChoice)
+        while (true) 
         {
-            case "create scene": CreateScene();
-                break;
+            string commandChoice = Display.Menu(new List<string>() { "create scene", "load scene", "inspect scene" }, ProjectContext!.Name!);
 
-            case "load scene": LoadScene();
-                break;
+            switch (commandChoice)
+            {
+                case "create scene":
+                    CreateScene();
+                    break;
 
-            case "inspect scene": InspectScene();
-                break;
+                case "load scene":
+                    LoadScene();
+                    break;
+
+                case "inspect scene":
+                    InspectScene();
+                    break;
+            }
         }
     }
 
@@ -49,7 +58,7 @@ class Engine
                 continue;
             }
 
-            if (ProjectContext!.Scenes.Any(project => project.Name == sceneName))
+            if (ProjectContext!.Scenes.Any(scene => scene.Name == sceneName))
             {
                 Display.Warning("a scene with that name already exists");
                 continue;
@@ -63,11 +72,58 @@ class Engine
 
     static void LoadScene()
     {
+        if (ProjectContext!.Scenes.Count == 0)
+        {
+            Display.Warning("no scenes found");
+            return;
+        }
 
+        Console.Clear();
+
+        Console.ForegroundColor = Display.Gray;
+        Console.WriteLine("scenes\n\n");
+
+        List<string?> scenes = ProjectContext!.Scenes.Select(scene => scene.Name).ToList();
+
+        string sceneName = Display.Menu(scenes!, "choose a scene to load");
+        Scene scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == sceneName)!;
+
+        CreateSceneContext(scene);
     }
 
     static void InspectScene()
     {
 
+        if (ProjectContext!.Scenes.Count == 0)
+        {
+            Display.Warning("no scenes found");
+            return;
+        }
+
+        Console.Clear();
+
+        Console.ForegroundColor = Display.Gray;
+        Console.WriteLine("scenes\n\n");
+
+        List<string?> scenes = ProjectContext!.Scenes.Select(scene => scene.Name).ToList();
+
+        string sceneName = Display.Menu(scenes!, "choose a scene to inspect");
+        Scene scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == sceneName)!;
+
+        Console.Clear();
+        Console.Write(scene.Name);
+
+        Console.ReadKey();
+
+        return;
+
+    }
+
+    public static void CreateSceneContext(Scene scene)
+    {
+        SceneContext = scene;
+
+        Console.WriteLine(scene.Name);
+        Console.ReadKey();
     }
 }
