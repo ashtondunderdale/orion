@@ -49,6 +49,7 @@ internal class SceneEditor
         int objPointerX = 0;
         int objPointerY = 0;
 
+        Console.SetCursorPosition(objPointerX, objPointerY);
         Console.Write("X");
 
         while (true)
@@ -79,12 +80,13 @@ internal class SceneEditor
             }
             else if (keyInfo.Key == ConsoleKey.Enter) 
             {
-                Voxel voxel = new(objPointerX, objPointerY);
-                SceneContext.Objects.Add(voxel);
+                Block block = new(objPointerX, objPointerY);
+                SceneContext.Objects.Add(block);
             }
             else if (keyInfo.Key == ConsoleKey.Tab)
             {
-                return;
+                Console.Clear();
+                break;
             }
 
             Console.SetCursorPosition(objPointerX, objPointerY);

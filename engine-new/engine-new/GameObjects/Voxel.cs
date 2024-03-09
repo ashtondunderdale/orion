@@ -9,9 +9,4 @@ internal class Voxel
     public int X { get; set; }
 
     public int Y { get; set; }
-
-    public Voxel(int x, int y) 
-    {
-        X = x; Y = y;
-    }
 }

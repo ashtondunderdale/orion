@@ -142,7 +142,7 @@ class Engine
             switch (option)
             {
                 case "scene editor":
-                    SceneEditor.Menu(SceneContext);
+                    SceneEditor.Menu(SceneContext!);
                     break;
 
                 case "play":
