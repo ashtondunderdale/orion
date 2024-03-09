@@ -6,38 +6,24 @@ internal class Launcher
 {
     static List<Project> Projects = new();
 
-    static ConsoleColor Gray = ConsoleColor.Gray;
-    static ConsoleColor DarkGray = ConsoleColor.DarkGray;
-    static ConsoleColor White = ConsoleColor.White;
-    static ConsoleColor ErrorColour = ConsoleColor.Yellow;
     static void Main()
     {
-        Initialise();
-    }
-
-    static void Initialise() 
-    {
-        while (true) 
+        while (true)
         {
-            string option = DisplayMenuOptions(new List<string>() { "Create", "View", "Load", "Delete", "Settings", "Help", "Exit" }, "  < Orion >  ");
+            string option = Display.Menu(new List<string>() { "Create", "View", "Load", "Delete", "Settings", "Help", "Exit" }, "  < Orion >  ");
 
             switch (option)
             {
-                case "Create":
-                    CreateProject();
+                case "Create": CreateProject();
                     break;
 
-                case "View":
-                    ViewProjects();
+                case "View": ViewProjects();
                     break;
 
-                case "Load":
-                    LoadProject();
-                    DisplayLoadingIcon(4);
+                case "Load": LoadProject();
                     break;
 
-                case "Delete":
-                    DeleteProject();
+                case "Delete": DeleteProject();
                     break;
             }
         }
@@ -49,28 +35,28 @@ internal class Launcher
         {
             Console.Clear();
 
-            Console.ForegroundColor = Gray;
+            Console.ForegroundColor = Display.Gray;
             Console.WriteLine("enter a name for your project\n\n  >");
 
-            Console.ForegroundColor = DarkGray;
+            Console.ForegroundColor = Display.DarkGray;
             Console.SetCursorPosition(4, 2);
             string? projectName = Console.ReadLine();
 
             if (string.IsNullOrEmpty(projectName))
             {
-                DisplayErrorMessage("project name can not be empty");
+                Display.ErrorMessage("project name can not be empty");
                 continue;
             }
 
             if (projectName.Length > 16) 
             {
-                DisplayErrorMessage("project name must be less than 16 characters");
+                Display.ErrorMessage("project name must be less than 16 characters");
                 continue;
             }
 
             if (Projects.Any(project => project.Name == projectName))
             {
-                DisplayErrorMessage("a project with that name already exists");
+                Display.ErrorMessage("a project with that name already exists");
                 continue;
             }
 
@@ -85,17 +71,23 @@ internal class Launcher
 
     static void ViewProjects()
     {
+        if (Projects.Count == 0) 
+        {
+            Display.Message("no projects found");
+            return;
+        }
+
         Console.Clear();
 
-        Console.ForegroundColor = Gray;
+        Console.ForegroundColor = Display.Gray;
         Console.WriteLine("projects\n\n");
 
         for (int i = 0; i < Projects.Count; i++)
         {
-            Console.ForegroundColor = White;
+            Console.ForegroundColor = Display.White;
             Console.Write($" {Projects[i].Name,-16}   ");
 
-            Console.ForegroundColor = DarkGray;
+            Console.ForegroundColor = Display.DarkGray;
             Console.Write($"{Projects[i].CreationDate}\n");
         }
 
@@ -104,85 +96,48 @@ internal class Launcher
 
     static void LoadProject()
     {
+        if (Projects.Count == 0)
+        {
+            Display.Message("no projects found");
+            return;
+        }
+
+        Console.Clear();
+
+        Console.ForegroundColor = Display.Gray;
+        Console.WriteLine("projects\n\n");
+
+        List<string?> projects = Projects.Select(project => project.Name).ToList();
+
+        string project = Display.Menu(projects!, "choose a project to load");
+
+        Display.LoadingIcon(6);
     }
 
     static void DeleteProject()
     {
-        List<string> projectNames = new();
-
-        foreach (var project in Projects) 
+        if (Projects.Count == 0)
         {
-            projectNames.Add(project.Name!);
+            Display.Message("no projects found");
+            return;
         }
 
-        string projectNameToDelete = DisplayMenuOptions(projectNames, "choose a project to delete");
+        List<string?> projects = Projects.Select(project => project.Name).ToList();
 
-        // are you sure?
+        string projectNameToDelete = Display.Menu(projects!, "choose a project to delete");
+
+        string deleteConfirmation = Display.Menu(new List<string>() { "yes", "no" }, $"are you sure you want to delete {projectNameToDelete}?");
+
+        if (deleteConfirmation == "no")
+        {
+            Display.Message($"project {projectNameToDelete} has not been deleted");
+            return;
+        }
 
         Project projectToDelete = Projects.Where(project => project.Name == projectNameToDelete).FirstOrDefault()!;
         Projects.Remove(projectToDelete);
-    }
 
-    static string DisplayMenuOptions(List<string> options, string header)
-    {
-        int activeOptionIndex = 0;
-        bool selectedOption = false;
-
-        while (true)
-        {
-            Console.Clear();
-            Console.ForegroundColor = White;
-            Console.WriteLine($"{header}\n");
-
-            for (int i = 0; i < options.Count; i++)
-            {
-                Console.ForegroundColor = activeOptionIndex == i ? 
-                    (selectedOption ? White : Gray) : DarkGray;
-
-                Console.WriteLine(activeOptionIndex == i ? $"\n  > {options[i]}\n" : options[i]);
-
-                if (activeOptionIndex == i && selectedOption) 
-                {
-                    Console.ForegroundColor = Gray;
-                    return options[i];
-                }
-            }
-
-            ConsoleKeyInfo input = Console.ReadKey();
-
-            if (input.Key == ConsoleKey.UpArrow && activeOptionIndex - 1 > -1)
-            {
-                activeOptionIndex--;               
-            }
-            else if (input.Key == ConsoleKey.DownArrow && activeOptionIndex < options.Count - 1)
-            {
-                activeOptionIndex++;              
-            }
-            else if (input.Key == ConsoleKey.Enter)
-            {
-                selectedOption = !selectedOption;
-            }
-        }
-    }
-
-    static void DisplayLoadingIcon(int repetitions)
-    {
-        Console.ForegroundColor = White;
-        string[] loadingSymbols = { "|", "/", "-", "\\" };
-
-        int currentIndex = 0;
-        for (int iteration = 0; iteration < repetitions; iteration++)
-        {
-            Console.Write(" \r" + loadingSymbols[currentIndex++ % loadingSymbols.Length]);
-            Thread.Sleep(100);
-        }
-    }
-
-    static void DisplayErrorMessage(string message) 
-    {
-        Console.ForegroundColor = ErrorColour;
-        Console.Write($"\n\n  {message}");
-        Console.ReadKey();
+        Display.Message($"project {projectNameToDelete} has been deleted");
     }
 }
 
