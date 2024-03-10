@@ -198,7 +198,7 @@ internal class SceneEditor
             {
                 direction = Console.ReadKey(true);
 
-                Movement.MovementScript(player, direction);
+                Movement.MovementScript(player, direction, SceneContext);
 
                 if (direction.Key == ConsoleKey.Tab)
                 {

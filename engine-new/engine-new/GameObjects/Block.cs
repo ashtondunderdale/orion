@@ -11,6 +11,8 @@ internal class Block : Voxel
         Symbol = '#';
         Type = "block";
         Colour = ConsoleColor.DarkGray;
+
+        Scripts = new List<Script> { new Collider() };
     }
 }
 

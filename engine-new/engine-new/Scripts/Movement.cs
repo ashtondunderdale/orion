@@ -6,7 +6,7 @@
         private static int defaultY;
         private static bool isFirstCall = true;
 
-        public static void MovementScript(Player player, ConsoleKeyInfo direction)
+        public static void MovementScript(Player player, ConsoleKeyInfo direction, Scene scene)
         {
             if (isFirstCall)
             {
@@ -18,22 +18,25 @@
             int previousX = player.X;
             int previousY = player.Y;
 
+            int newX = player.X;
+            int newY = player.Y;
+
             switch (direction.Key)
             {
                 case ConsoleKey.UpArrow:
-                    player.Y--;
+                    newY--;
                     break;
 
                 case ConsoleKey.DownArrow:
-                    player.Y++;
+                    newY++;
                     break;
 
                 case ConsoleKey.LeftArrow:
-                    player.X--;
+                    newX--;
                     break;
 
                 case ConsoleKey.RightArrow:
-                    player.X++;
+                    newX++;
                     break;
 
                 case ConsoleKey.Tab:
@@ -46,6 +49,20 @@
                 default:
                     break;
             }
+
+            foreach (var obj in scene.Objects)
+            {
+                if (obj != player && obj.Scripts.Any(script => script is Collider))
+                {
+                    if (obj.X == newX && obj.Y == newY)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            player.X = newX;
+            player.Y = newY;
 
             Console.SetCursorPosition(previousX, previousY);
             Console.Write(' ');
