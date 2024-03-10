@@ -10,7 +10,9 @@ internal class Launcher
 
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "create", "view", "load", "delete", "settings", "help", "exit" }, "  < Orion >  ");
+            string option = Display.Menu(new List<string>() { "create", "view", "load", "delete", "settings", "help", "exit" }, 
+                ". + .. . *  +. <─*─*─ Orion ─*─*─> + *. .. * . . ..     .   . .. + ..   . .    .*  .*  + . .   .       .           .. \n" +
+                "     .  . .   .. + *. +. . +* . + .. . + .  .. .      ");
 
             switch (option)
             {
@@ -184,5 +186,12 @@ internal class Launcher
                     return;
             }
         }
+    }
+
+    static void WriteConstellation()
+    {
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.SetCursorPosition(20, 20);
+        Console.Write("AAAAAAAAAAA");
     }
 }

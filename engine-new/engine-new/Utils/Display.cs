@@ -60,7 +60,6 @@ internal class Display
     {
         int activeOptionIndex = 0;
         bool selectedOption = false;
-
         while (true)
         {
             Console.Clear();
