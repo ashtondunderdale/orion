@@ -8,7 +8,7 @@ internal class Player : Voxel
         X = x; Y = y;
 
         Symbol = '0';
-        Type = "player";
+        Name = "player";
         Colour = ConsoleColor.Cyan;
 
         Scripts = new List<Script>() { new Movement() };

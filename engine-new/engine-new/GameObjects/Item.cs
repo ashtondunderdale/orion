@@ -9,7 +9,7 @@ internal class Item : Voxel
         X = x; Y = y;
 
         Symbol = 'i';
-        Type = "Item";
+        Name = "Item";
         Colour = ConsoleColor.Cyan;
     }
 }

@@ -2,7 +2,7 @@
 
 internal class Voxel
 {
-    public string? Type { get; set; }
+    public string? Name { get; set; }
 
     public char Symbol { get; set; }
 

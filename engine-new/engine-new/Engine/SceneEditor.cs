@@ -1,6 +1,4 @@
-﻿using static System.Formats.Asn1.AsnWriter;
-
-namespace orion;
+﻿namespace orion;
 
 internal class SceneEditor
 {
@@ -33,23 +31,56 @@ internal class SceneEditor
     {
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "create object", "remove object", "add preset object", "return" }, Engine.ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "create object", "remove object", "create preset", "return" }, Engine.ProjectContext!.Name!);
 
             switch (option)
             {
                 case "create object":
-                    ModifySceneObjects("create");
+
+                    Voxel voxel = new();
+
+                    while (true) 
+                    {
+                        string script = CreateObject.Menu();
+
+                        if (script == "") break;
+
+                        switch (script)
+                        {
+                            case "collider":
+                                voxel.Scripts.Add(new Collider());
+                                break;
+
+                            case "movement":
+                                voxel.Scripts.Add(new Collider());
+                                break;
+
+                            case "dynamic colour":
+                                voxel.Scripts.Add(new Collider());
+                                break;
+
+                            case "dynamic symbol":
+                                voxel.Scripts.Add(new DynamicSymbol());
+                                break;
+
+                            case "pseudo collider":
+                                voxel.Scripts.Add(new PseudoCollider());
+                                break;
+                        }
+                    }
+
+                    Engine.ProjectContext.PresetObjects.Add(voxel);
                     break;
 
                 case "remove object":
                     ModifySceneObjects("delete");
                     break;
 
-                case "add preset object":
+                case "create preset":
 
-                    string obj = Display.Menu(new List<string>() { "create player" }, "choose an object to add");
+                    string obj = Display.Menu(Engine.ProjectContext.PresetObjects.Select(voxel => voxel.Name).ToList()!, "choose an object to add");
 
-                    if (SceneContext!.Objects.FirstOrDefault(obj => obj is Player) is Player)
+                    if (SceneContext!.Objects.FirstOrDefault(obj => obj is Player) is Player && obj == "player")
                     {
                         Display.Warning("only one player object per scene is permitted");
                         continue;
@@ -127,14 +158,14 @@ internal class SceneEditor
             }
             else if (keyInfo.Key == ConsoleKey.Enter)
             {
-                if (action == "create player")
+                if (action == "player")
                 {
                     Player player = new(objPointerX, objPointerY);
                     SceneContext.Objects.Add(player);
                     return;
                 }
 
-                if (action == "create")
+                if (action == "block") 
                 {
                     if (SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY)) continue;
 

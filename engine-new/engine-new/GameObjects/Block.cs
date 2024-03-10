@@ -9,11 +9,9 @@ internal class Block : Voxel
         X = x; Y = y;
 
         Symbol = '#';
-        Type = "block";
+        Name = "block";
         Colour = ConsoleColor.DarkGray;
 
         Scripts = new List<Script> { new Collider() };
     }
 }
-
-
