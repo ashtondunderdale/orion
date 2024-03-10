@@ -12,15 +12,12 @@ internal class SceneEditor
 
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "scene editor", "play", "render", "return" }, SceneContext!.Name!);
+            string option = Display.Menu(new List<string>() { "scene editor", "play", "return" }, SceneContext!.Name!);
 
             switch (option)
             {
                 case "scene editor":
                     SceneEditorMenu();
-                    break;
-
-                case "render":
                     break;
 
                 case "play":
@@ -78,6 +75,7 @@ internal class SceneEditor
         foreach (var obj in SceneContext!.Objects)
         {
             Console.SetCursorPosition(obj.X, obj.Y);
+            Console.ForegroundColor = Display.PrimaryColour;
             Console.Write(obj.Symbol);
         }
 
@@ -102,7 +100,7 @@ internal class SceneEditor
                 var obj = SceneContext.Objects.FirstOrDefault(obj => obj.X == objPointerX && obj.Y == objPointerY);
 
                 Console.SetCursorPosition(objPointerX, objPointerY);
-                Console.ForegroundColor = Display.White;
+                Console.ForegroundColor = Display.PrimaryColour;
                 Console.Write(obj!.Symbol);
             }
             else if (!pointerOnObject)
@@ -143,7 +141,7 @@ internal class SceneEditor
                     Block block = new(objPointerX, objPointerY);
 
                     Console.SetCursorPosition(objPointerX, objPointerY);
-                    Console.ForegroundColor = Display.White;
+                    Console.ForegroundColor = Display.PrimaryColour;
                     Console.Write(block.Symbol);
 
                     SceneContext.Objects.Add(block);
@@ -187,6 +185,7 @@ internal class SceneEditor
         foreach (var obj in SceneContext.Objects)
         {
             Console.SetCursorPosition(obj.X, obj.Y);
+            Console.ForegroundColor = Display.PrimaryColour;
             Console.Write(obj.Symbol);
         }
 

@@ -24,19 +24,23 @@
             switch (direction.Key)
             {
                 case ConsoleKey.UpArrow:
-                    newY--;
+                    if (newY > 0) 
+                        newY--;
                     break;
 
                 case ConsoleKey.DownArrow:
-                    newY++;
+                    if (newY < Console.WindowHeight - 1) 
+                        newY++;
                     break;
 
                 case ConsoleKey.LeftArrow:
-                    newX--;
+                    if (newX > 0) 
+                        newX--;
                     break;
 
                 case ConsoleKey.RightArrow:
-                    newX++;
+                    if (newX < Console.WindowWidth - 1)
+                        newX++;
                     break;
 
                 case ConsoleKey.Tab:
@@ -68,6 +72,7 @@
             Console.Write(' ');
 
             Console.SetCursorPosition(player.X, player.Y);
+            Console.ForegroundColor = Display.PrimaryColour;
             Console.Write(player.Symbol);
         }
     }

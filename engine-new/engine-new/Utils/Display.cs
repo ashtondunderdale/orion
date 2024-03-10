@@ -4,12 +4,21 @@ internal class Display
 {
     public static ConsoleColor Gray = ConsoleColor.Gray;
     public static ConsoleColor DarkGray = ConsoleColor.DarkGray;
-    public static ConsoleColor White = ConsoleColor.White;
+    public static ConsoleColor PrimaryColour = Engine.IsDarkMode ? ConsoleColor.White : ConsoleColor.Black;
+
+    public static ConsoleColor BackgroundColour = Engine.IsDarkMode ? ConsoleColor.Black : ConsoleColor.White;
 
     public static ConsoleColor InfoColour = ConsoleColor.Cyan;
     public static ConsoleColor ErrorColour = ConsoleColor.Red;
-    public static ConsoleColor WarningColour = ConsoleColor.Yellow;
-    public static ConsoleColor PointerColour = ConsoleColor.Yellow;
+    public static ConsoleColor WarningColour = Engine.IsDarkMode ? ConsoleColor.Yellow : ConsoleColor.DarkYellow;
+    public static ConsoleColor PointerColour = Engine.IsDarkMode ? ConsoleColor.White : ConsoleColor.Black;
+    public static void UpdateTheme()
+    {
+        PrimaryColour = Engine.IsDarkMode ? ConsoleColor.White : ConsoleColor.Black;
+        Console.BackgroundColor = Engine.IsDarkMode ? ConsoleColor.Black : ConsoleColor.White;
+        WarningColour = Engine.IsDarkMode ? ConsoleColor.Yellow : ConsoleColor.DarkYellow;
+        PointerColour = Engine.IsDarkMode ? ConsoleColor.White : ConsoleColor.Black;
+    }
 
     public static void Message(string message)
     {
@@ -34,7 +43,7 @@ internal class Display
 
     public static void LoadingIcon(int repetitions)
     {
-        Console.ForegroundColor = White;
+        Console.ForegroundColor = PrimaryColour;
         string[] loadingSymbols = { "|", "/", "-", "\\" };
 
         Console.WriteLine();
@@ -55,13 +64,13 @@ internal class Display
         while (true)
         {
             Console.Clear();
-            Console.ForegroundColor = White;
+            Console.ForegroundColor = PrimaryColour;
             Console.WriteLine($"{header}\n");
 
             for (int i = 0; i < options.Count; i++)
             {
                 Console.ForegroundColor = activeOptionIndex == i ?
-                    selectedOption ? White : Gray : DarkGray;
+                    selectedOption ? PrimaryColour : Gray : DarkGray;
 
                 Console.WriteLine(activeOptionIndex == i ? $"\n  > {options[i]}\n" : options[i]);
 

@@ -3,6 +3,7 @@
 class Engine
 {
     public static Project? ProjectContext;
+    public static bool IsDarkMode = true;
 
     public static void ProjectMenu(Project project)
     {
@@ -10,7 +11,7 @@ class Engine
 
         while (true) 
         {
-            string option = Display.Menu(new List<string>() { "create", "load", "inspect", "play", "return" }, ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "create", "inspect", "load", "delete", "play",  "return" }, ProjectContext!.Name!);
 
             switch (option)
             {
@@ -18,12 +19,16 @@ class Engine
                     CreateScene();
                     break;
 
+                case "inspect":
+                    InspectScene();
+                    break;
+
                 case "load":
                     LoadScene();
                     break;
 
-                case "inspect":
-                    InspectScene();
+                case "delete":
+                    DeleteScene();
                     break;
 
                 case "play":
@@ -120,6 +125,34 @@ class Engine
         Console.ReadKey();
 
         return;
+    }
+
+    static void DeleteScene() 
+    {
+        if (ProjectContext!.Scenes.Count == 0)
+        {
+            Display.Warning("no scenes found");
+            return;
+        }
+
+        List<string?> sceneNames = ProjectContext.Scenes.Select(scene => scene.Name).ToList();
+
+        string sceneNameToDelete = Display.Menu(sceneNames!, "choose a scene to delete");
+
+        if (sceneNameToDelete == "") return;
+
+        string deleteConfirmation = Display.Menu(new List<string>() { "yes", "no" }, $"are you sure you want to delete {sceneNameToDelete}?");
+
+        if (deleteConfirmation == "no")
+        {
+            Display.Message($"project {sceneNameToDelete} has not been deleted");
+            return;
+        }
+
+        Scene sceneToDelete = ProjectContext.Scenes.Where(scene => scene.Name == sceneNameToDelete).FirstOrDefault()!;
+        ProjectContext.Scenes.Remove(sceneToDelete);
+
+        Display.Message($"project {sceneNameToDelete} has been deleted");
     }
 
     static void PlayProject() 

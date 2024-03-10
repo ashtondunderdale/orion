@@ -6,6 +6,8 @@ internal class Launcher
 
     static void Main()
     {
+        Console.BackgroundColor = Display.BackgroundColour;
+
         while (true)
         {
             string option = Display.Menu(new List<string>() { "create", "view", "load", "delete", "settings", "help", "exit" }, "  < Orion >  ");
@@ -26,6 +28,13 @@ internal class Launcher
 
                 case "delete": 
                     DeleteProject();
+                    break;
+
+                case "settings":
+                    ProjectSettings();
+                    break;
+
+                case "help":
                     break;
 
                 case "exit": return;
@@ -93,7 +102,7 @@ internal class Launcher
 
         for (int i = 0; i < Projects.Count; i++)
         {
-            Console.ForegroundColor = Display.White;
+            Console.ForegroundColor = Display.PrimaryColour;
             Console.Write($" {Projects[i].Name,-16}   ");
 
             Console.ForegroundColor = Display.DarkGray;
@@ -153,6 +162,28 @@ internal class Launcher
         Projects.Remove(projectToDelete);
 
         Display.Message($"project {projectNameToDelete} has been deleted");
+    }
+
+    static void ProjectSettings() 
+    {
+        while (true) 
+        {
+            Console.Clear();
+
+            string option = Display.Menu(new List<string>() { $"dark mode: {Engine.IsDarkMode}" }, "settings");
+
+            switch (option)
+            {
+                case "dark mode: True":
+                case "dark mode: False":
+                    Engine.IsDarkMode = !Engine.IsDarkMode;
+                    Display.UpdateTheme();
+                    break;
+
+                case "":
+                    return;
+            }
+        }
     }
 }
 
