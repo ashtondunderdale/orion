@@ -52,6 +52,12 @@ internal class SceneEditor
 
                     string obj = Display.Menu(new List<string>() { "create player" }, "choose an object to add");
 
+                    if (SceneContext!.Objects.FirstOrDefault(obj => obj is Player) is Player)
+                    {
+                        Display.Warning("only one player object per scene is permitted");
+                        continue;
+                    }
+
                     ModifySceneObjects(obj);
                     break;
 
@@ -168,9 +174,11 @@ internal class SceneEditor
 
     public static void PlayScene()
     {
-        if (SceneContext!.Objects.FirstOrDefault(obj => obj is Player) is not Player player)
+        Player? player = SceneContext!.Objects.FirstOrDefault(obj => obj is Player) as Player;
+
+        if (player is null) 
         {
-            Display.Warning("player is null");
+            Display.Warning("create a player object to play the level");
             return;
         }
 
@@ -196,7 +204,6 @@ internal class SceneEditor
                 {
                     break;
                 }
-
             }
         }
     }
