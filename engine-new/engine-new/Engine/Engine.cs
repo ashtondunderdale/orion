@@ -64,8 +64,17 @@ class Engine
                 Display.Warning("a scene with that name already exists");
                 continue;
             }
+
             Scene scene = new(sceneName);
             ProjectContext.Scenes.Add(scene);
+
+            string option = Display.Menu(new List<string>() { "yes", "no" }, "would you like to load this scene now?");
+
+            if (option == "yes")
+            {
+                scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == sceneName)!;
+                SceneEditor.SceneMenu(scene!);
+            }
 
             return;
         }
