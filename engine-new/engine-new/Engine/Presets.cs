@@ -1,6 +1,6 @@
 ﻿namespace orion;
 
-internal class CreateObject
+internal class Presets
 {
     public static void CreatePresetObject()
     {
@@ -18,7 +18,7 @@ internal class CreateObject
             Console.SetCursorPosition(4, 2);
             objName = Console.ReadLine();
 
-            if (string.IsNullOrEmpty(objName))
+            if (string.IsNullOrWhiteSpace(objName))
             {
                 Display.Warning("object name can not be empty");
                 continue;
@@ -35,7 +35,7 @@ internal class CreateObject
             break;
         }
 
-        while (true) 
+        while (true)
         {
             Console.Clear();
 
@@ -46,9 +46,9 @@ internal class CreateObject
             Console.SetCursorPosition(4, 2);
             char objSymbol = Console.ReadKey().KeyChar;
 
-            if (string.IsNullOrEmpty(objName))
+            if (char.IsWhiteSpace(objSymbol) || objSymbol == '\t')
             {
-                Display.Warning("object symbol can not be empty");
+                Display.Warning("Object symbol cannot be whitespace.");
                 continue;
             }
 
@@ -103,9 +103,19 @@ internal class CreateObject
             }
 
             Display.Message($"\nAdded {script} to {objName}");
-            Console.ReadKey();
         }
 
         Engine.ProjectContext.PresetObjects.Add(voxel);
+    }
+
+    public static void DeletePresetObject() 
+    {
+        List<string> presets = Engine.ProjectContext!.PresetObjects.Select(obj => obj.Name).ToList()!;
+        string preset = Display.Menu(presets, "choose the preset to delete");
+
+        Voxel presetToDelete = Engine.ProjectContext.PresetObjects.Where(obj => obj.Name == preset).FirstOrDefault()!;
+        Engine.ProjectContext!.PresetObjects.Remove(presetToDelete);
+
+        Display.Message($"preset {preset} has been deleted");
     }
 }

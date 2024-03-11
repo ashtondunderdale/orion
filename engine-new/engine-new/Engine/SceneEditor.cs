@@ -31,7 +31,7 @@ internal class SceneEditor
     {
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "add object", "remove object", "create new preset", "inspect preset", "return" }, Engine.ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "add object", "remove object", "create preset", "delete preset", "inspect preset", "return" }, Engine.ProjectContext!.Name!);
 
             switch (option)
             {
@@ -52,8 +52,12 @@ internal class SceneEditor
                     ModifySceneObjects("delete");
                     break;
 
-                case "create new preset":
-                    CreateObject.CreatePresetObject();
+                case "create preset":
+                    Presets.CreatePresetObject();
+                    break;
+
+                case "delete preset":
+                    Presets.DeletePresetObject();
                     break;
 
                 case "inspect preset":
