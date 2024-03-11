@@ -12,6 +12,7 @@ internal class GameContext
             return;
         }
 
+        // lazy implementation of a game loop - TODO: separate thread
         while (true)
         {
             Console.Clear();
@@ -24,6 +25,12 @@ internal class GameContext
             }
 
             ConsoleKeyInfo direction;
+
+            if (player is null)
+            {
+                Display.Warning("Create a player object to play the level"); // add error code for reference in help
+                return;
+            }
 
             if (player.Scripts.Any(script => script is Movement))
             {
@@ -51,10 +58,7 @@ internal class GameContext
                         player = scene.Objects.FirstOrDefault(obj => obj is Player) as Player;
                     }
 
-                    else 
-                    {
-                        break;
-                    }
+                    else break;            
                 }
             }
         }

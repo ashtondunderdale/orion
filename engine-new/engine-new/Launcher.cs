@@ -10,7 +10,7 @@ internal class Launcher
 
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "create", "inspect", "load", "delete", "settings", "help", "exit" }, 
+            string option = Display.Menu(new List<string>() { "create", "inspect", "load", "delete", "settings", "info", "exit" }, 
                 ". + .. . *  +. <─*─*─ Orion ─*─*─> + *. .. * . . ..     .   . .. + ..   . .    .*  .*  + . .   .       .           .. \n" +
                 "     .  . .   .. + *. +. . +* . + .. . + .  .. .      ");
 
@@ -36,7 +36,8 @@ internal class Launcher
                     ProjectSettings();
                     break;
 
-                case "help":
+                case "info":
+                    Help.DisplayHelp();
                     break;
 
                 case "exit": return;
@@ -186,12 +187,5 @@ internal class Launcher
                     return;
             }
         }
-    }
-
-    static void WriteConstellation()
-    {
-        Console.ForegroundColor = ConsoleColor.White;
-        Console.SetCursorPosition(20, 20);
-        Console.Write("AAAAAAAAAAA");
     }
 }
