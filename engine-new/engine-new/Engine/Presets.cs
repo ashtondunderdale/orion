@@ -44,32 +44,37 @@ internal class Presets
 
             Console.ForegroundColor = Display.DarkGray;
             Console.SetCursorPosition(4, 2);
-            char objSymbol = Console.ReadKey().KeyChar;
+            string? objSymbol = Console.ReadLine();
 
-            if (char.IsWhiteSpace(objSymbol) || objSymbol == '\t')
+            if (string.IsNullOrWhiteSpace(objSymbol))
             {
-                Display.Warning("Object symbol cannot be whitespace.");
+                Display.Warning("Object symbol cannot be whitespace");
                 continue;
             }
 
-            voxel.Symbol = objSymbol;
+            if (objSymbol.Length > 1) 
+            {
+                Display.Warning("Object symbol must be one character");
+                continue;
+            }
+
+            voxel.Symbol = objSymbol[0];
 
             break;
         }
 
-        string colour = Display.Menu(new List<string>() { "red", }, "select a colour for your custom object");
+        string colour = Display.Menu(Display.ColourMap.Keys.ToList(), "Select a colour for your custom object");
         ConsoleColor objColour;
 
-        switch (colour) 
+        if (Display.ColourMap.TryGetValue(colour.ToLower(), out ConsoleColor mappedColor))
         {
-            case "red":
-                objColour = ConsoleColor.Red;
-                break;
-
-            default: 
-                objColour = ConsoleColor.White;
-                break;
+            objColour = mappedColor;
         }
+        else
+        {
+            objColour = ConsoleColor.White;
+        }
+
 
         voxel.Colour = objColour;
 

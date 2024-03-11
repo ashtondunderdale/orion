@@ -12,7 +12,28 @@ internal class Display
     public static ConsoleColor ErrorColour = ConsoleColor.Red;
     public static ConsoleColor WarningColour = Engine.IsDarkMode ? ConsoleColor.Yellow : ConsoleColor.DarkYellow;
     public static ConsoleColor PointerColour = Engine.IsDarkMode ? ConsoleColor.White : ConsoleColor.Black;
-    public static void UpdateTheme()
+
+    public static Dictionary<string, ConsoleColor> ColourMap = new()
+    {
+        { "white", ConsoleColor.White },
+        { "yellow", ConsoleColor.Yellow },
+        { "magenta", ConsoleColor.Magenta },
+        { "red", ConsoleColor.Red },
+        { "cyan", ConsoleColor.Cyan },
+        { "green", ConsoleColor.Green },
+        { "blue", ConsoleColor.Blue },
+        { "gray", ConsoleColor.Gray },
+        { "dark yellow", ConsoleColor.DarkYellow },
+        { "dark magenta", ConsoleColor.DarkMagenta },
+        { "dark red", ConsoleColor.DarkRed },
+        { "dark cyan", ConsoleColor.DarkCyan },
+        { "dark green", ConsoleColor.DarkGreen },
+        { "dark blue", ConsoleColor.DarkBlue },
+        { "dark gray", ConsoleColor.DarkGray },
+        { "black - maybe rethink this one", ConsoleColor.Black }
+    };
+
+public static void UpdateTheme()
     {
         PrimaryColour = Engine.IsDarkMode ? ConsoleColor.White : ConsoleColor.Black;
         Console.BackgroundColor = Engine.IsDarkMode ? ConsoleColor.Black : ConsoleColor.White;
@@ -70,6 +91,11 @@ internal class Display
             {
                 Console.ForegroundColor = activeOptionIndex == i ?
                     selectedOption ? PrimaryColour : Gray : DarkGray;
+
+                if (header.Contains("colour")) 
+                {
+                    Console.ForegroundColor = ColourMap[options[i]] == ConsoleColor.Black ? ConsoleColor.White : ColourMap[options[i]];
+                }
 
                 Console.WriteLine(activeOptionIndex == i ? $"\n  > {options[i]}\n" : options[i]);
 
