@@ -36,40 +36,8 @@ internal class SceneEditor
             switch (option)
             {
                 case "create object":
+                    CreateObject.CreatePresetObject();
 
-                    Voxel voxel = new();
-
-                    while (true) 
-                    {
-                        string script = CreateObject.Menu();
-
-                        if (script == "") break;
-
-                        switch (script)
-                        {
-                            case "collider":
-                                voxel.Scripts.Add(new Collider());
-                                break;
-
-                            case "movement":
-                                voxel.Scripts.Add(new Collider());
-                                break;
-
-                            case "dynamic colour":
-                                voxel.Scripts.Add(new Collider());
-                                break;
-
-                            case "dynamic symbol":
-                                voxel.Scripts.Add(new DynamicSymbol());
-                                break;
-
-                            case "pseudo collider":
-                                voxel.Scripts.Add(new PseudoCollider());
-                                break;
-                        }
-                    }
-
-                    Engine.ProjectContext.PresetObjects.Add(voxel);
                     break;
 
                 case "remove object":
