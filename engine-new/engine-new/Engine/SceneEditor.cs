@@ -10,7 +10,7 @@ internal class SceneEditor
 
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "scene editor", "play", "return" }, SceneContext!.Name!);
+            string option = Display.Menu(new List<string>() { "scene editor", "play", "return" }, SceneContext.Name!);
 
             switch (option)
             {
@@ -19,7 +19,7 @@ internal class SceneEditor
                     break;
 
                 case "play":
-                    PlayScene();
+                    GameContext.CreateGameContext(scene);
                     break;
 
                 case "return": return;
@@ -57,7 +57,7 @@ internal class SceneEditor
                     break;
 
                 case "inspect preset":
-                    InspectPreset();
+                    Presets.InspectPreset();
                     break;
 
                 case "delete preset":
@@ -69,44 +69,13 @@ internal class SceneEditor
                     break;
 
                 case "play":
-                    PlayScene();
+                    GameContext.CreateGameContext(SceneContext!);
                     break;
 
 
                 case "return": return;
             }
         }
-    }
-
-    static void InspectPreset() 
-    {
-        Console.Clear();
-
-        Console.ForegroundColor = Display.Gray;
-        Console.WriteLine("scenes\n\n");
-
-        List<string?> presetObjects = Engine.ProjectContext!.PresetObjects.Select(obj => obj.Name).ToList();
-
-        string sceneName = Display.Menu(presetObjects!, "choose a scene to inspect");
-
-        if (sceneName == "") return;
-
-        Voxel obj = Engine.ProjectContext!.PresetObjects.FirstOrDefault(obj => obj.Name == sceneName)!;
-
-        Console.Clear();
-
-        Console.Write($"{obj.Name}\n\n");
-        Console.Write($"{obj.Symbol}\n\n");
-        Console.Write($"{obj.Colour}\n\n");
-
-        foreach (var script in obj.Scripts) 
-        {
-            Console.WriteLine(script.Name);
-        }
-
-        Console.ReadKey();
-
-        return;
     }
 
     static void ModifySceneObjects(string action) 
@@ -241,11 +210,19 @@ internal class SceneEditor
     static void UpdateSceneSequence()
     {
         List<string> scenes = Engine.ProjectContext!.Scenes.Select(scene => scene.Name).ToList()!;
+        List<string> tempScenes = Engine.ProjectContext.SceneSequence;
+
         int sceneSequenceLength = Engine.ProjectContext!.Scenes.Count;
 
         for (int i = 0; i < sceneSequenceLength; i++)
         {
             string scene = Display.Menu(scenes, $"Select a scene to reorder the scene switching sequence\nYour current Scene Sequence is: {string.Join(", ", Engine.ProjectContext!.SceneSequence)}");
+
+            if (scene == "") 
+            {
+                Engine.ProjectContext!.SceneSequence = tempScenes;
+                return;
+            }
 
             if (i == 0) 
             {
@@ -254,43 +231,6 @@ internal class SceneEditor
 
             Engine.ProjectContext!.SceneSequence.Insert(i, scene);
             scenes.Remove(scene);
-        }
-    }
-
-    public static void PlayScene()
-    {
-        Player? player = SceneContext!.Objects.FirstOrDefault(obj => obj is Player) as Player;
-
-        if (player is null) 
-        {
-            Display.Warning("create a player object to play the level");
-            return;
-        }
-
-        Console.Clear();
-
-        foreach (var obj in SceneContext.Objects)
-        {
-            Console.SetCursorPosition(obj.X, obj.Y);
-            Console.ForegroundColor = obj.Colour;
-            Console.Write(obj.Symbol);
-        }
-
-        while (true)
-        {
-            ConsoleKeyInfo direction;
-
-            if (player.Scripts.Any(script => script is Movement))
-            {
-                direction = Console.ReadKey(true);
-
-                Movement.MovementScript(player, direction, SceneContext);
-
-                if (direction.Key == ConsoleKey.Tab)
-                {
-                    break;
-                }
-            }
         }
     }
 }

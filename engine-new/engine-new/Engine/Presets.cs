@@ -113,6 +113,37 @@ internal class Presets
         Engine.ProjectContext.PresetObjects.Add(voxel);
     }
 
+    public static void InspectPreset()
+    {
+        Console.Clear();
+
+        Console.ForegroundColor = Display.Gray;
+        Console.WriteLine("scenes\n\n");
+
+        List<string?> presetObjects = Engine.ProjectContext!.PresetObjects.Select(obj => obj.Name).ToList();
+
+        string sceneName = Display.Menu(presetObjects!, "choose a scene to inspect");
+
+        if (sceneName == "") return;
+
+        Voxel obj = Engine.ProjectContext!.PresetObjects.FirstOrDefault(obj => obj.Name == sceneName)!;
+
+        Console.Clear();
+
+        Console.Write($"{obj.Name}\n\n");
+        Console.Write($"{obj.Symbol}\n\n");
+        Console.Write($"{obj.Colour}\n\n");
+
+        foreach (var script in obj.Scripts)
+        {
+            Console.WriteLine(script.Name);
+        }
+
+        Console.ReadKey();
+
+        return;
+    }
+
     public static void DeletePresetObject() 
     {
         List<string> presets = Engine.ProjectContext!.PresetObjects.Select(obj => obj.Name).ToList()!;

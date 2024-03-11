@@ -33,7 +33,10 @@ class Engine
                     break;
 
                 case "play":
-                    PlayProject();
+                    string firstSceneName = ProjectContext!.SceneSequence[0];
+                    Scene scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == firstSceneName)!;
+
+                    GameContext.CreateGameContext(scene);
                     break;
 
                 case "return": return;
@@ -161,16 +164,10 @@ class Engine
         }
 
         Scene sceneToDelete = ProjectContext.Scenes.Where(scene => scene.Name == sceneNameToDelete).FirstOrDefault()!;
-        ProjectContext.Scenes.Remove(sceneToDelete);
+
+        ProjectContext.Scenes.Remove(sceneToDelete);    
+        ProjectContext.SceneSequence.Remove(sceneNameToDelete);
 
         Display.Message($"project {sceneNameToDelete} has been deleted");
-    }
-
-    static void PlayProject() 
-    {
-        string firstSceneName = ProjectContext!.SceneSequence[0];
-        Scene scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == firstSceneName)!;  
-
-        
     }
 }
