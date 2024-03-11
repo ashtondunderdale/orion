@@ -6,6 +6,11 @@
         private static int defaultY;
         private static bool isFirstCall = true;
 
+        public Movement() 
+        {
+            Name = "movement";
+        }
+
         public static void MovementScript(Player player, ConsoleKeyInfo direction, Scene scene)
         {
             if (isFirstCall)
@@ -58,10 +63,7 @@
             {
                 if (obj != player && obj.Scripts.Any(script => script is Collider))
                 {
-                    if (obj.X == newX && obj.Y == newY)
-                    {
-                        return;
-                    }
+                    if (obj.X == newX && obj.Y == newY) return;                 
                 }
             }
 
@@ -72,7 +74,7 @@
             Console.Write(' ');
 
             Console.SetCursorPosition(player.X, player.Y);
-            Console.ForegroundColor = Display.PrimaryColour;
+            Console.ForegroundColor = player.Colour;
             Console.Write(player.Symbol);
         }
     }

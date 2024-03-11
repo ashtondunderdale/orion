@@ -2,11 +2,6 @@
 {
     internal class Script
     {
-
-
-        public Script() 
-        { 
-        
-        }
+        public string? Name { get; set; }
     }
 }

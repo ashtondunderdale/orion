@@ -31,20 +31,11 @@ internal class SceneEditor
     {
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "create object", "remove object", "create preset", "return" }, Engine.ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "add object", "remove object", "create new preset", "inspect preset", "return" }, Engine.ProjectContext!.Name!);
 
             switch (option)
             {
-                case "create object":
-                    CreateObject.CreatePresetObject();
-
-                    break;
-
-                case "remove object":
-                    ModifySceneObjects("delete");
-                    break;
-
-                case "create preset":
+                case "add object":
 
                     string obj = Display.Menu(Engine.ProjectContext.PresetObjects.Select(voxel => voxel.Name).ToList()!, "choose an object to add");
 
@@ -57,6 +48,18 @@ internal class SceneEditor
                     ModifySceneObjects(obj);
                     break;
 
+                case "remove object":
+                    ModifySceneObjects("delete");
+                    break;
+
+                case "create new preset":
+                    CreateObject.CreatePresetObject();
+                    break;
+
+                case "inspect preset":
+                    InspectPreset();
+                    break;
+
                 case "play":
                     PlayScene();
                     break;
@@ -67,6 +70,37 @@ internal class SceneEditor
         }
     }
 
+    static void InspectPreset() 
+    {
+        Console.Clear();
+
+        Console.ForegroundColor = Display.Gray;
+        Console.WriteLine("scenes\n\n");
+
+        List<string?> presetObjects = Engine.ProjectContext!.PresetObjects.Select(obj => obj.Name).ToList();
+
+        string sceneName = Display.Menu(presetObjects!, "choose a scene to inspect");
+
+        if (sceneName == "") return;
+
+        Voxel obj = Engine.ProjectContext!.PresetObjects.FirstOrDefault(obj => obj.Name == sceneName)!;
+
+        Console.Clear();
+
+        Console.Write($"{obj.Name}\n\n");
+        Console.Write($"{obj.Symbol}\n\n");
+        Console.Write($"{obj.Colour}\n\n");
+
+        foreach (var script in obj.Scripts) 
+        {
+            Console.WriteLine(script.Name);
+        }
+
+        Console.ReadKey();
+
+        return;
+    }
+
     static void ModifySceneObjects(string action) 
     {
         Console.Clear();
@@ -74,7 +108,7 @@ internal class SceneEditor
         foreach (var obj in SceneContext!.Objects)
         {
             Console.SetCursorPosition(obj.X, obj.Y);
-            Console.ForegroundColor = Display.PrimaryColour;
+            Console.ForegroundColor = obj.Colour;
             Console.Write(obj.Symbol);
         }
 
@@ -96,10 +130,10 @@ internal class SceneEditor
 
             if (pointerOnObject)
             {
-                var obj = SceneContext.Objects.FirstOrDefault(obj => obj.X == objPointerX && obj.Y == objPointerY);
+                Voxel obj = SceneContext.Objects.FirstOrDefault(obj => obj.X == objPointerX && obj.Y == objPointerY)!;
 
                 Console.SetCursorPosition(objPointerX, objPointerY);
-                Console.ForegroundColor = Display.PrimaryColour;
+                Console.ForegroundColor = obj.Colour;
                 Console.Write(obj!.Symbol);
             }
             else if (!pointerOnObject)
@@ -133,28 +167,53 @@ internal class SceneEditor
                     return;
                 }
 
-                if (action == "block") 
+                if (action == "block")
                 {
                     if (SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY)) continue;
 
                     Block block = new(objPointerX, objPointerY);
 
                     Console.SetCursorPosition(objPointerX, objPointerY);
-                    Console.ForegroundColor = Display.PrimaryColour;
+                    Console.ForegroundColor = block.Colour;
                     Console.Write(block.Symbol);
 
                     SceneContext.Objects.Add(block);
                 }
-                else 
+                else if (action == "delete")
                 {
                     Voxel obj = SceneContext.Objects.FirstOrDefault(obj => obj.X == objPointerX && obj.Y == objPointerY)!;
 
-                    if (obj is null) continue;                  
+                    if (obj is null) continue;
 
                     SceneContext.Objects.Remove(obj);
 
                     Console.SetCursorPosition(obj.X, obj.Y);
                     Console.Write(' ');
+                }
+                else // for adding a preset with a dynamic name
+                {
+                    if (SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY)) continue;
+
+                    Voxel matchingObj = Engine.ProjectContext!.PresetObjects.Where(obj => obj.Name == action).FirstOrDefault()!;
+
+                    Voxel obj = new()
+                    {
+                        Name = matchingObj.Name,
+                        Symbol = matchingObj.Symbol,
+
+                        Colour = matchingObj.Colour,
+
+                        Scripts = matchingObj.Scripts,
+
+                        X = objPointerX,
+                        Y = objPointerY
+                    };
+
+                    Console.SetCursorPosition(objPointerX, objPointerY);
+                    Console.ForegroundColor = obj.Colour;
+                    Console.Write(obj.Symbol);
+
+                    SceneContext.Objects.Add(obj);
                 }
             }
             else if (keyInfo.Key == ConsoleKey.Tab)
@@ -184,7 +243,7 @@ internal class SceneEditor
         foreach (var obj in SceneContext.Objects)
         {
             Console.SetCursorPosition(obj.X, obj.Y);
-            Console.ForegroundColor = Display.PrimaryColour;
+            Console.ForegroundColor = obj.Colour;
             Console.Write(obj.Symbol);
         }
 
