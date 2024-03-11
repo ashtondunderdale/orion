@@ -162,6 +162,8 @@ internal class SceneEditor
             {
                 if (action == "player")
                 {
+                    if (SceneContext.Objects.Any(obj => obj.X == objPointerX && obj.Y == objPointerY)) continue;
+
                     Player player = new(objPointerX, objPointerY);
                     SceneContext.Objects.Add(player);
                     return;
