@@ -10,7 +10,7 @@ internal class Switcher : Voxel
         X = x; Y = y;
 
         Symbol = '\u2794';
-        Name = "Switcher";
+        Name = "switcher";
         Colour = ConsoleColor.Yellow;
     }
 }

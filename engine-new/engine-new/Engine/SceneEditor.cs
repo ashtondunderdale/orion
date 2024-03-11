@@ -210,7 +210,7 @@ internal class SceneEditor
     static void UpdateSceneSequence()
     {
         List<string> scenes = Engine.ProjectContext!.Scenes.Select(scene => scene.Name).ToList()!;
-        List<string> tempScenes = Engine.ProjectContext.SceneSequence;
+        List<string> previousSceneSequence = Engine.ProjectContext.SceneSequence; 
 
         int sceneSequenceLength = Engine.ProjectContext!.Scenes.Count;
 
@@ -218,9 +218,9 @@ internal class SceneEditor
         {
             string scene = Display.Menu(scenes, $"Select a scene to reorder the scene switching sequence\nYour current Scene Sequence is: {string.Join(", ", Engine.ProjectContext!.SceneSequence)}");
 
-            if (scene == "") 
+            if (scene == "") // for if the user presses tab - resets to previous scene sequence
             {
-                Engine.ProjectContext!.SceneSequence = tempScenes;
+                Engine.ProjectContext!.SceneSequence = previousSceneSequence;
                 return;
             }
 

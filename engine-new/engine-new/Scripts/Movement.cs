@@ -11,7 +11,7 @@
             Name = "movement";
         }
 
-        public static void MovementScript(Player player, ConsoleKeyInfo direction, Scene scene)
+        public static string MovementScript(Player player, ConsoleKeyInfo direction, Scene scene)
         {
             if (isFirstCall)
             {
@@ -53,28 +53,17 @@
                     player.Y = defaultY;
 
                     isFirstCall = true;
-                    return;
+                    return "exit context";
 
                 default:
                     break;
             }
 
-            foreach (var obj in scene.Objects)
-            {
-                if (obj != player && obj.Scripts.Any(script => script is Collider))
-                {
-                    if (obj.X == newX && obj.Y == newY) return;                 
-                }
-            }
+            if (Collider.CheckCollision(player, newX, newY, scene) == "collider")
+                return "collision";
 
-            
-            foreach (var obj in scene.Objects)
-            {
-                if (obj.Name == "Switcher" && obj.X == newX && obj.Y == newY) 
-                {
-                    
-                }
-            }
+            if (Collider.CheckCollision(player, newX, newY, scene) == "switcher")
+                return "switcher";
 
             player.X = newX;
             player.Y = newY;
@@ -85,6 +74,8 @@
             Console.SetCursorPosition(player.X, player.Y);
             Console.ForegroundColor = player.Colour;
             Console.Write(player.Symbol);
+
+            return "move";
         }
     }
 }
