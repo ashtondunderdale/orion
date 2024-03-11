@@ -4,9 +4,10 @@ class Engine
 {
     public static Project? ProjectContext;
     public static bool IsDarkMode = true;
-
     public static void ProjectMenu(Project project)
     {
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+
         ProjectContext = project;
 
         while (true) 

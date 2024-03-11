@@ -114,12 +114,23 @@ public static void UpdateTheme()
 
             ConsoleKeyInfo input = Console.ReadKey();
 
-            if (input.Key == ConsoleKey.UpArrow && activeOptionIndex - 1 > -1)
+            if (input.Key == ConsoleKey.UpArrow)
             {
+                if (activeOptionIndex == 0)
+                {
+                    activeOptionIndex = options.Count;
+                }
+
                 activeOptionIndex--;
             }
-            else if (input.Key == ConsoleKey.DownArrow && activeOptionIndex < options.Count - 1)
+            else if (input.Key == ConsoleKey.DownArrow)
             {
+                if (activeOptionIndex == options.Count - 1)
+                {
+                    activeOptionIndex = 0;
+                    continue;
+                }
+
                 activeOptionIndex++;
             }
             else if (input.Key == ConsoleKey.Enter)

@@ -67,6 +67,15 @@
                 }
             }
 
+            
+            foreach (var obj in scene.Objects)
+            {
+                if (obj.Name == "Switcher" && obj.X == newX && obj.Y == newY) 
+                {
+                    
+                }
+            }
+
             player.X = newX;
             player.Y = newY;
 
