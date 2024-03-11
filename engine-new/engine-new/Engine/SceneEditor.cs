@@ -31,7 +31,7 @@ internal class SceneEditor
     {
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "add object", "remove object", "create preset", "delete preset", "inspect preset", "return" }, Engine.ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "add object", "remove object", "create preset", "inspect preset", "delete preset", "scene sequence", "return" }, Engine.ProjectContext!.Name!);
 
             switch (option)
             {
@@ -56,12 +56,16 @@ internal class SceneEditor
                     Presets.CreatePresetObject();
                     break;
 
+                case "inspect preset":
+                    InspectPreset();
+                    break;
+
                 case "delete preset":
                     Presets.DeletePresetObject();
                     break;
 
-                case "inspect preset":
-                    InspectPreset();
+                case "scene sequence":
+                    UpdateSceneSequence();
                     break;
 
                 case "play":
@@ -231,6 +235,25 @@ internal class SceneEditor
             Console.SetCursorPosition(objPointerX, objPointerY);
             Console.ForegroundColor = Display.PointerColour;
             Console.Write('X');
+        }
+    }
+
+    static void UpdateSceneSequence()
+    {
+        List<string> scenes = Engine.ProjectContext!.Scenes.Select(scene => scene.Name).ToList()!;
+        int sceneSequenceLength = Engine.ProjectContext!.Scenes.Count;
+
+        for (int i = 0; i < sceneSequenceLength; i++)
+        {
+            string scene = Display.Menu(scenes, $"Select a scene to reorder the scene switching sequence\nYour current Scene Sequence is: {string.Join(", ", Engine.ProjectContext!.SceneSequence)}");
+
+            if (i == 0) 
+            {
+                Engine.ProjectContext!.SceneSequence.Clear();
+            }
+
+            Engine.ProjectContext!.SceneSequence.Insert(i, scene);
+            scenes.Remove(scene);
         }
     }
 

@@ -68,6 +68,7 @@ class Engine
 
             Scene scene = new(sceneName);
             ProjectContext.Scenes.Add(scene);
+            ProjectContext.SceneSequence.Add(scene.Name!);
 
             string option = Display.Menu(new List<string>() { "yes", "no" }, "would you like to load this scene now?");
 
@@ -167,6 +168,9 @@ class Engine
 
     static void PlayProject() 
     {
+        string firstSceneName = ProjectContext!.SceneSequence[0];
+        Scene scene = ProjectContext.Scenes.FirstOrDefault(scene => scene.Name == firstSceneName)!;  
 
+        
     }
 }

@@ -10,7 +10,7 @@ internal class Launcher
 
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "create", "view", "load", "delete", "settings", "help", "exit" }, 
+            string option = Display.Menu(new List<string>() { "create", "inspect", "load", "delete", "settings", "help", "exit" }, 
                 ". + .. . *  +. <─*─*─ Orion ─*─*─> + *. .. * . . ..     .   . .. + ..   . .    .*  .*  + . .   .       .           .. \n" +
                 "     .  . .   .. + *. +. . +* . + .. . + .  .. .      ");
 
@@ -20,8 +20,8 @@ internal class Launcher
                     CreateProject();
                     break;
 
-                case "view": 
-                    ViewProjects();
+                case "inspect": 
+                    InspectProjects();
                     break;
 
                 case "load": 
@@ -89,7 +89,7 @@ internal class Launcher
         }
     }
 
-    static void ViewProjects()
+    static void InspectProjects()
     {
         if (Projects.Count == 0) 
         {
