@@ -15,6 +15,9 @@ internal class Project
 
     public List<string> SceneSequence = new();
 
+
+    public Scene FinishScene = new("finish scene");
+
     public Project(string name, DateTime creationDate) 
     {
         Name = name;

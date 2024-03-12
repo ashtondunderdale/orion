@@ -31,7 +31,7 @@ internal class SceneEditor
     {
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "add object", "remove object", "create preset", "inspect preset", "delete preset", "scene sequence", "return" }, Engine.ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "add object", "remove object", "create preset", "inspect preset", "delete preset", "scene sequence", "finish scene", "return" }, Engine.ProjectContext!.Name!);
 
             switch (option)
             {
@@ -66,6 +66,10 @@ internal class SceneEditor
 
                 case "scene sequence":
                     UpdateSceneSequence();
+                    break;
+
+                case "finish scene":
+                    FinishScene();
                     break;
 
                 case "play":
@@ -231,6 +235,25 @@ internal class SceneEditor
 
             Engine.ProjectContext!.SceneSequence.Insert(i, scene);
             scenes.Remove(scene);
+        }
+    }
+
+    static void FinishScene() 
+    {
+        Console.Clear();
+
+        string option = Display.Menu(new List<string>() { "view scene", "edit scene" }, "the finish scene will display once your player collides with the last switcher");
+
+        if (option == "view scene") 
+        {
+            GameContext.CreateGameContext(Engine.ProjectContext!.FinishScene);
+        }
+        else if (option == "edit scene")
+        {
+            string obj = Display.Menu(Engine.ProjectContext!.PresetObjects.Select(voxel => voxel.Name).ToList()!, "choose an object to add");
+
+            SceneContext = Engine.ProjectContext.FinishScene;
+            ModifySceneObjects(obj);
         }
     }
 }

@@ -4,6 +4,21 @@ internal class GameContext
 {
     public static void CreateGameContext(Scene scene)
     {
+        if (scene.Name == Engine.ProjectContext!.FinishScene.Name) 
+        {
+            Console.Clear();
+
+            foreach (var obj in scene.Objects)
+            {
+                Console.SetCursorPosition(obj.X, obj.Y);
+                Console.ForegroundColor = obj.Colour;
+                Console.Write(obj.Symbol);
+            }
+
+            Console.ReadKey();
+            return;
+        }
+
         Player? player = scene!.Objects.FirstOrDefault(obj => obj is Player) as Player;
 
         if (player is null)
@@ -28,7 +43,7 @@ internal class GameContext
 
             if (player is null)
             {
-                Display.Warning("Create a player object to play the level"); // add error code for reference in help
+                Display.Warning("Add a player to the scene to play it"); // add error code for reference in help
                 return;
             }
 
@@ -55,15 +70,15 @@ internal class GameContext
                     scene = nextScene;
 
                     /*
-                        reference the new player from the next scene
-                        this is because it was using the previous player object from the scene parameter above
-                        consequently, the resultant player being used was that of the previous scene - moving invisibly
-                        */
+                      reference the new player from the next scene
+                      this is because it was using the previous player object from the scene parameter above
+                      consequently, the resultant player being used was that of the previous scene - moving invisibly
+                    */
                     player = scene.Objects.FirstOrDefault(obj => obj is Player) as Player;         
                 }
                 else if (action == "finisher") 
-                { 
-                    // display win screen
+                {
+                    scene = Engine.ProjectContext.FinishScene;
                 }
             }
         }
