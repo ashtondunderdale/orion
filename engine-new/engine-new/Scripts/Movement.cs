@@ -73,7 +73,6 @@
                 return "switcher";
             }
 
-
             if (collisionAction == "finisher")
             {
                 player.X = defaultX;
@@ -81,6 +80,15 @@
 
                 isFirstCall = true;
                 return "finisher";
+            }
+
+            if (collisionAction == "terminator")
+            {
+                player.X = defaultX;
+                player.Y = defaultY;
+
+                isFirstCall = true;
+                return "terminator";
             }
 
             player.X = newX;

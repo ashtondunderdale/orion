@@ -16,6 +16,11 @@ internal class Collider : Script
                 if (obj.X == newX && obj.Y == newY) return "collider";            
             }
 
+            if (obj != player && obj.Scripts.Any(script => script is Terminator))
+            {
+                if (obj.X == newX && obj.Y == newY) return "terminator";
+            }
+
             if (obj != player && obj.Name == "switcher") 
             {
                 if (obj.X == newX && obj.Y == newY) return "switcher";

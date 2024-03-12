@@ -4,7 +4,7 @@ internal class GameContext
 {
     public static void CreateGameContext(Scene scene)
     {
-        if (scene.Name == Engine.ProjectContext!.FinishScene.Name) 
+        if (scene.Name == Engine.ProjectContext!.FinishScene.Name || scene.Name == Engine.ProjectContext!.FailScene.Name) 
         {
             Console.Clear();
 
@@ -62,7 +62,7 @@ internal class GameContext
                 {
                     Scene nextScene = GetNextScene(scene)!;
 
-                    if (nextScene is null) 
+                    if (nextScene is null)
                     {
                         break;
                     }
@@ -74,11 +74,15 @@ internal class GameContext
                       this is because it was using the previous player object from the scene parameter above
                       consequently, the resultant player being used was that of the previous scene - moving invisibly
                     */
-                    player = scene.Objects.FirstOrDefault(obj => obj is Player) as Player;         
+                    player = scene.Objects.FirstOrDefault(obj => obj is Player) as Player;
                 }
-                else if (action == "finisher") 
+                else if (action == "finisher")
                 {
                     scene = Engine.ProjectContext.FinishScene;
+                }
+                else if (action == "terminator") 
+                {
+                    scene = Engine.ProjectContext.FailScene;
                 }
             }
         }

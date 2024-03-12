@@ -31,7 +31,7 @@ internal class SceneEditor
     {
         while (true)
         {
-            string option = Display.Menu(new List<string>() { "add object", "remove object", "create preset", "inspect preset", "delete preset", "scene sequence", "finish scene", "return" }, Engine.ProjectContext!.Name!);
+            string option = Display.Menu(new List<string>() { "add object", "remove object", "create preset", "inspect preset", "edit preset", "delete preset", "scene sequence", "finish scene", "fail scene", "return" }, Engine.ProjectContext!.Name!);
 
             switch (option)
             {
@@ -60,6 +60,10 @@ internal class SceneEditor
                     Presets.InspectPreset();
                     break;
 
+                case "edit preset":
+                    Presets.EditPreset();
+                    break;
+
                 case "delete preset":
                     Presets.DeletePresetObject();
                     break;
@@ -70,6 +74,10 @@ internal class SceneEditor
 
                 case "finish scene":
                     FinishScene();
+                    break;
+
+                case "fail scene":
+                    FailScene();
                     break;
 
                 case "play":
@@ -253,6 +261,25 @@ internal class SceneEditor
             string obj = Display.Menu(Engine.ProjectContext!.PresetObjects.Select(voxel => voxel.Name).ToList()!, "choose an object to add");
 
             SceneContext = Engine.ProjectContext.FinishScene;
+            ModifySceneObjects(obj);
+        }
+    }
+
+    static void FailScene()
+    {
+        Console.Clear();
+
+        string option = Display.Menu(new List<string>() { "view scene", "edit scene" }, "the fail scene will display once your player collides with a terminator");
+
+        if (option == "view scene")
+        {
+            GameContext.CreateGameContext(Engine.ProjectContext!.FailScene);
+        }
+        else if (option == "edit scene")
+        {
+            string obj = Display.Menu(Engine.ProjectContext!.PresetObjects.Select(voxel => voxel.Name).ToList()!, "choose an object to add");
+
+            SceneContext = Engine.ProjectContext.FailScene;
             ModifySceneObjects(obj);
         }
     }

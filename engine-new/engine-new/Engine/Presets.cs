@@ -144,6 +144,11 @@ internal class Presets
         return;
     }
 
+    public static void EditPreset() 
+    { 
+    
+    }
+
     public static void DeletePresetObject() 
     {
         List<string> presets = Engine.ProjectContext!.PresetObjects.Select(obj => obj.Name).ToList()!;
