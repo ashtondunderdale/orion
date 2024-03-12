@@ -20,6 +20,11 @@ internal class Collider : Script
             {
                 if (obj.X == newX && obj.Y == newY) return "switcher";
             }
+
+            if (obj != player && obj.Name == "finisher")
+            {
+                if (obj.X == newX && obj.Y == newY) return "finisher";
+            }
         }
 
         return "";

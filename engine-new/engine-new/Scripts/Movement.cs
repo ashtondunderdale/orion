@@ -59,11 +59,29 @@
                     break;
             }
 
-            if (Collider.CheckCollision(player, newX, newY, scene) == "collider")
+            String collisionAction = Collider.CheckCollision(player, newX, newY, scene);
+
+            if (collisionAction == "collider")
                 return "collision";
 
-            if (Collider.CheckCollision(player, newX, newY, scene) == "switcher")
+            if (collisionAction == "switcher") 
+            {
+                player.X = defaultX;
+                player.Y = defaultY;
+
+                isFirstCall = true;
                 return "switcher";
+            }
+
+
+            if (collisionAction == "finisher")
+            {
+                player.X = defaultX;
+                player.Y = defaultY;
+
+                isFirstCall = true;
+                return "finisher";
+            }
 
             player.X = newX;
             player.Y = newY;

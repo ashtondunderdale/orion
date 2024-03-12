@@ -10,7 +10,7 @@ internal class Project
     public List<Scene> Scenes = new();
 
 
-    public List<Voxel> PresetObjects = new() { new Player(0, 0), new Block(0, 0), new Switcher(0, 0) };
+    public List<Voxel> PresetObjects = new() { new Player(0, 0), new Block(0, 0), new Switcher(0, 0), new Finisher(0, 0) };
 
 
     public List<string> SceneSequence = new();

@@ -8,7 +8,7 @@ internal class GameContext
 
         if (player is null)
         {
-            Display.Warning("Create a player object to play the level");
+            Display.Warning($"Create a player object to play {scene.Name}");
             return;
         }
 
@@ -47,18 +47,23 @@ internal class GameContext
                 {
                     Scene nextScene = GetNextScene(scene)!;
 
-                    if (nextScene != null)
+                    if (nextScene is null) 
                     {
-                        scene = nextScene;
-                        /*
-                         reference the new player from the next scene
-                         this is because it was using the previous player object from the scene parameter above
-                         consequently, the resultant player being used was that of the previous scene - moving invisibly
-                         */
-                        player = scene.Objects.FirstOrDefault(obj => obj is Player) as Player;
+                        break;
                     }
 
-                    else break;            
+                    scene = nextScene;
+
+                    /*
+                        reference the new player from the next scene
+                        this is because it was using the previous player object from the scene parameter above
+                        consequently, the resultant player being used was that of the previous scene - moving invisibly
+                        */
+                    player = scene.Objects.FirstOrDefault(obj => obj is Player) as Player;         
+                }
+                else if (action == "finisher") 
+                { 
+                    // display win screen
                 }
             }
         }
